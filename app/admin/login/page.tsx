@@ -1,0 +1,227 @@
+"use client"
+
+import type React from "react"
+
+import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { motion } from "framer-motion"
+import { Loader2, AlertCircle, Eye, EyeOff } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { setSigningIn } from "@/lib/supabase/client"
+
+export default function AdminLoginPage() {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isCheckingSession, setIsCheckingSession] = useState(true)
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const checkExistingSession = async () => {
+      try {
+        const storageKey = `sb-${new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!).hostname.split(".")[0]}-auth-token`
+        const stored = localStorage.getItem(storageKey)
+
+        if (stored) {
+          const parsed = JSON.parse(stored)
+          if (parsed?.user?.id) {
+            const { createClient } = await import("@/lib/supabase/client")
+            setSigningIn(true)
+            const supabase = createClient()
+            if (supabase) {
+              const { data: adminProfile } = await supabase
+                .from("admin_profiles")
+                .select("id")
+                .eq("id", parsed.user.id)
+                .single()
+
+              setSigningIn(false)
+              if (adminProfile) {
+                router.replace("/admin/dashboard")
+                return
+              }
+            }
+            setSigningIn(false)
+          }
+        }
+      } catch (err) {
+        console.error("Session check error:", err)
+      } finally {
+        setIsCheckingSession(false)
+      }
+    }
+
+    checkExistingSession()
+  }, [router])
+
+  useEffect(() => {
+    const errorParam = searchParams.get("error")
+    if (errorParam === "unauthorized") {
+      setError("You do not have admin access. Please contact the administrator.")
+    }
+  }, [searchParams])
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const { createClient } = await import("@/lib/supabase/client")
+      const supabase = createClient()
+
+      if (!supabase) {
+        throw new Error("Could not initialize authentication. Please refresh and try again.")
+      }
+
+      setSigningIn(true)
+
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      setSigningIn(false)
+
+      if (signInError) {
+        throw signInError
+      }
+
+      if (!data.user || !data.session) {
+        throw new Error("Login failed. Please try again.")
+      }
+
+      setSigningIn(true)
+      const { data: adminProfile, error: profileError } = await supabase
+        .from("admin_profiles")
+        .select("id, role")
+        .eq("id", data.user.id)
+        .single()
+      setSigningIn(false)
+
+      if (profileError || !adminProfile) {
+        await supabase.auth.signOut()
+        throw new Error("You do not have admin access. Please contact the administrator.")
+      }
+
+      window.location.href = "/admin/dashboard"
+    } catch (err) {
+      setSigningIn(false)
+      setError(err instanceof Error ? err.message : "An error occurred during login")
+      setIsLoading(false)
+    }
+  }
+
+  if (isCheckingSession) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 to-slate-100">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 to-slate-100 p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md"
+      >
+        <Card className="border-0 shadow-xl">
+          <CardHeader className="text-center pb-2">
+            <div className="flex justify-center mb-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-saffron to-sunset-orange rounded-2xl flex items-center justify-center">
+                <svg viewBox="0 0 40 40" fill="none" className="w-8 h-8" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="28" cy="12" r="5" fill="#FFD700" className="opacity-90" />
+                  <path d="M20 8L32 28H8L20 8Z" fill="white" />
+                  <path d="M12 16L22 28H2L12 16Z" fill="white" className="opacity-80" />
+                  <path d="M20 8L24 14H16L20 8Z" fill="#fff" />
+                </svg>
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-serif">Admin Login</CardTitle>
+            <CardDescription>
+              <span className="text-saffron">Tour</span>
+              <span>To</span>
+              <span className="text-forest-green">Himachal</span> Dashboard
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="admin@tourtohimachal.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                  disabled={isLoading}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    autoComplete="current-password"
+                    disabled={isLoading}
+                    className="pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 p-3 rounded-lg"
+                >
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <p>{error}</p>
+                </motion.div>
+              )}
+
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  "Sign in"
+                )}
+              </Button>
+            </form>
+
+            <p className="text-xs text-center text-muted-foreground mt-6">
+              Protected area. Unauthorized access is prohibited.
+            </p>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </div>
+  )
+}
