@@ -58,7 +58,7 @@ export function DiaryCard({ diary, featured = false }: DiaryCardProps) {
             whileHover="hover"
           >
             <div className="grid md:grid-cols-2 gap-0">
-              <div className="relative aspect-[4/3] md:aspect-auto">
+              <div className="relative aspect-4/3 md:aspect-auto">
                 <Image
                   src={imageUrl || "/placeholder.svg"}
                   alt={diary.title}
@@ -121,14 +121,14 @@ export function DiaryCard({ diary, featured = false }: DiaryCardProps) {
           initial="rest"
           whileHover="hover"
         >
-          <div className="relative aspect-[16/10]">
+          <div className="relative aspect-16/10">
             <Image
               src={imageUrl || "/placeholder.svg"}
               alt={diary.title}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
             <div className="absolute bottom-4 left-4 right-4">
               {diary.destination && (
                 <Badge className="bg-white/20 backdrop-blur-sm text-white text-xs">

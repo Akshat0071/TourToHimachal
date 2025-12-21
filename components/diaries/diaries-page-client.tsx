@@ -87,14 +87,32 @@ export function DiariesPageClient({ diaries }: DiariesPageClientProps) {
           subtitle="Dive into authentic travel experiences shared by fellow wanderers. From hidden waterfalls to sunrise treks, from cozy homestays to local chai stops — these diaries capture the soul of Himachal like no guidebook ever could."
         />
 
-        {/* Main Content */}
+        {/* Mobile Filter Bar - Visible only on mobile/tablet */}
+        <section className="lg:hidden bg-background/95 border-b border-border py-3 sm:py-4">
+          <div className="container mx-auto px-4">
+            <DiaryFilter
+              selectedTags={selectedDestination ? [selectedDestination] : []}
+              selectedMonth={null}
+              selectedAuthor={null}
+              searchQuery={searchQuery}
+              onTagChange={(tags) => setSelectedDestination(tags[0] || null)}
+              onMonthChange={() => {}}
+              onAuthorChange={() => {}}
+              onSearchChange={setSearchQuery}
+              onClearFilters={clearFilters}
+            />
+          </div>
+        </section>
+
+        {/* Main Content with Desktop Sidebar */}
         <section className="py-12 md:py-16">
           <div className="container mx-auto px-4">
-            <div className="grid lg:grid-cols-3 gap-8">
+            <div className="lg:grid lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_380px] lg:gap-8">
               {/* Main Column */}
-              <div className="lg:col-span-2">
-                {/* Filter Bar */}
-                <DiaryFilter
+              <div>
+                {/* Filter Bar - Hidden on desktop */}
+                <div className="hidden lg:hidden">
+                  <DiaryFilter
                   selectedTags={selectedDestination ? [selectedDestination] : []}
                   selectedMonth={null}
                   selectedAuthor={null}
@@ -102,16 +120,17 @@ export function DiariesPageClient({ diaries }: DiariesPageClientProps) {
                   onTagChange={(tags) => setSelectedDestination(tags[0] || null)}
                   onMonthChange={() => {}}
                   onAuthorChange={() => {}}
-                  onSearchChange={setSearchQuery}
-                  onClearFilters={clearFilters}
-                />
+                    onSearchChange={setSearchQuery}
+                    onClearFilters={clearFilters}
+                  />
+                </div>
 
                 {/* Diaries Grid */}
                 <motion.div
                   variants={staggerContainer}
                   initial="hidden"
                   animate="visible"
-                  className="grid md:grid-cols-2 gap-6"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-6"
                 >
                   {visibleDiaries.map((diary) => (
                     <DiaryCard key={diary.slug} diary={diary} />
@@ -144,10 +163,24 @@ export function DiariesPageClient({ diaries }: DiariesPageClientProps) {
                 )}
               </div>
 
-              {/* Sidebar */}
-              <aside className="space-y-8">
-                {/* Popular Diaries */}
-                {diaries.length > 0 && (
+              {/* Desktop Sidebar - Visible only on desktop */}
+              <aside className="hidden lg:block">
+                <div className="sticky top-28 space-y-6">
+                  {/* Filter Section */}
+                  <DiaryFilter
+                    selectedTags={selectedDestination ? [selectedDestination] : []}
+                    selectedMonth={null}
+                    selectedAuthor={null}
+                    searchQuery={searchQuery}
+                    onTagChange={(tags) => setSelectedDestination(tags[0] || null)}
+                    onMonthChange={() => {}}
+                    onAuthorChange={() => {}}
+                    onSearchChange={setSearchQuery}
+                    onClearFilters={clearFilters}
+                  />
+
+                  {/* Popular Diaries */}
+                  {diaries.length > 0 && (
                   <div className="bg-card rounded-xl p-6 shadow-md">
                     <h3 className="text-lg font-serif font-bold text-foreground mb-4">Popular Stories</h3>
                     <div className="space-y-4">
@@ -193,6 +226,7 @@ export function DiariesPageClient({ diaries }: DiariesPageClientProps) {
                     </div>
                   </div>
                 )}
+                </div>
               </aside>
             </div>
           </div>

@@ -14,8 +14,8 @@ export default function HomePage() {
     <main className="min-h-screen bg-background">
       <Header />
       <Hero />
-      <PopularDestinations />
       <TaxiService />
+      <PopularDestinations />
       <TravelThemes />
       <WhyChooseUs />
       <Testimonials />

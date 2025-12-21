@@ -101,7 +101,7 @@ export function DashboardStats({ stats }: DashboardStatsProps) {
                   <p className="text-xs sm:text-sm text-muted-foreground">{stat.label}</p>
                   <p className="text-2xl sm:text-3xl font-bold text-foreground mt-1">{stats[stat.key as keyof typeof stats]}</p>
                 </div>
-                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${stat.bgColor} flex items-center justify-center flex-shrink-0`}>
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${stat.bgColor} flex items-center justify-center shrink-0`}>
                   <stat.icon className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: stat.color.replace('text-', '') }} />
                 </div>
               </div>

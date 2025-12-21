@@ -43,7 +43,7 @@ const themes = [
 
 export function TravelThemes() {
   return (
-    <section className="py-24 md:py-32 bg-gradient-to-b from-muted/50 to-background relative overflow-hidden">
+    <section className="py-12 md:py-16 bg-linear-to-b from-muted/50 to-background relative overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute top-20 left-10 w-20 h-20 border-4 border-saffron/20 rounded-full" />
       <div className="absolute bottom-20 right-10 w-32 h-32 border-4 border-forest-green/20 rounded-full" />
@@ -54,7 +54,7 @@ export function TravelThemes() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
-          className="text-center mb-16"
+          className="text-center mb-8 md:mb-10"
         >
           <motion.div
             variants={fadeInUp}
@@ -70,7 +70,7 @@ export function TravelThemes() {
             className="text-3xl md:text-5xl font-serif font-bold text-foreground mt-3 mb-4"
           >
             Travel{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-saffron to-sunset-orange">Themes</span>
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-saffron to-sunset-orange">Themes</span>
           </motion.h2>
           <motion.p variants={fadeInUp} className="text-muted-foreground max-w-2xl mx-auto text-lg">
             Whether you seek spiritual enlightenment, romantic getaways, or adrenaline-pumping adventures, we have the
@@ -101,15 +101,15 @@ export function TravelThemes() {
                 />
                 {/* Gradient overlay */}
                 <div
-                  className={`absolute inset-0 bg-gradient-to-t ${theme.color} opacity-40 group-hover:opacity-60 transition-opacity duration-300`}
+                  className={`absolute inset-0 bg-linear-to-t ${theme.color} opacity-40 group-hover:opacity-60 transition-opacity duration-300`}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent" />
 
                 {/* Content */}
                 <div className="absolute inset-0 flex flex-col justify-end p-6">
                   {/* Icon */}
                   <div
-                    className={`w-14 h-14 mb-4 rounded-2xl bg-gradient-to-br ${theme.color} flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300`}
+                    className={`w-14 h-14 mb-4 rounded-2xl bg-linear-to-br ${theme.color} flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300`}
                   >
                     <theme.icon className="h-7 w-7 text-white" />
                   </div>

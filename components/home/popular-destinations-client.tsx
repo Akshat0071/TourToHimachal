@@ -61,7 +61,7 @@ export function PopularDestinationsClient({ packages }: PopularDestinationsClien
       : fallbackDestinations
 
   return (
-    <section className="py-24 md:py-32 relative overflow-hidden">
+    <section className="py-8 md:py-8 lg:py-12 relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-saffron/10 to-transparent rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-forest-green/10 to-transparent rounded-full blur-3xl" />
@@ -72,25 +72,25 @@ export function PopularDestinationsClient({ packages }: PopularDestinationsClien
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
-          className="text-center mb-16"
+          className="text-center mb-8 md:mb-10"
         >
           <motion.div
             variants={fadeInUp}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-mountain-blue/10 rounded-full mb-4"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-mountain-blue/10 rounded-full mb-2 md:mb-3"
           >
             <MapPin className="h-4 w-4 text-mountain-blue" />
             <span className="text-sm font-semibold text-mountain-blue uppercase tracking-wider">Explore Himachal</span>
           </motion.div>
           <motion.h2
             variants={fadeInUp}
-            className="text-3xl md:text-5xl font-serif font-bold text-foreground mt-3 mb-4"
+            className="text-3xl md:text-5xl font-serif font-bold text-foreground mt-2 md:mt-3 mb-2 md:mb-3"
           >
             Popular{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-mountain-blue to-forest-green">
               Destinations
             </span>
           </motion.h2>
-          <motion.p variants={fadeInUp} className="text-muted-foreground max-w-2xl mx-auto text-lg">
+          <motion.p variants={fadeInUp} className="text-muted-foreground max-w-2xl mx-auto text-lg mb-2">
             Discover the most sought-after destinations in Himachal Pradesh, from snow-capped mountains to serene
             valleys.
           </motion.p>
@@ -101,7 +101,7 @@ export function PopularDestinationsClient({ packages }: PopularDestinationsClien
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-6"
         >
           {destinations.map((destination, index) => (
             <motion.div
@@ -163,7 +163,7 @@ export function PopularDestinationsClient({ packages }: PopularDestinationsClien
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mt-12"
+          className="text-center mt-8 md:mt-10"
         >
           <Button
             asChild

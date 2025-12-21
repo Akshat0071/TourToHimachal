@@ -68,7 +68,7 @@ export function DiaryHero({ diary, images }: DiaryHeroProps) {
               className="object-cover"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+            <div className="absolute inset-0 bg-g-to- linear-black via-black/50 to-transparent" />
           </motion.div>
         </AnimatePresence>
       </div>

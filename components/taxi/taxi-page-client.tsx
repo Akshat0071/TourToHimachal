@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
+import Image from "next/image"
 import { Phone, MessageCircle, Car, Calendar, Shield, Zap, Users, Gauge } from "lucide-react"
 import { Header } from "@/components/home/header"
 import { Footer } from "@/components/home/footer"
@@ -100,10 +101,10 @@ export function TaxiPageClient({ vehicles, routes }: TaxiPageClientProps) {
       </InfiniteScrollHero>
 
       {/* Stats Section - Enhanced Design */}
-      <section className="py-16 md:py-24 bg-linear-to-br from-forest-green/5 via-mountain-blue/5 to-saffron/5 relative overflow-hidden">
+      <section className="py-8 md:py-12 bg-linear-to-br from-forest-green/5 via-mountain-blue/5 to-saffron/5 relative overflow-hidden">
         {/* Decorative background elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-forest-green/10 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-mountain-blue/10 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-linear-to-bl from-forest-green/10 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-linear-to-tr from-mountain-blue/10 to-transparent rounded-full blur-3xl" />
 
         <div className="container mx-auto px-4 relative">
           <motion.div
@@ -111,7 +112,7 @@ export function TaxiPageClient({ vehicles, routes }: TaxiPageClientProps) {
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-4"
+            className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-12"
           >
             {[
               { 
@@ -143,31 +144,31 @@ export function TaxiPageClient({ vehicles, routes }: TaxiPageClientProps) {
                   variants={fadeInUp}
                   className="group relative"
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${stat.bgGradient} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                  <div className={`absolute inset-0 bg-linear-to-br ${stat.bgGradient} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                   
-                  <div className={`relative bg-gradient-to-br ${stat.bgGradient} backdrop-blur-xl border border-white/20 rounded-2xl p-4 md:p-6 text-center hover:shadow-2xl transition-all duration-300 group-hover:scale-105`}>
+                  <div className={`relative bg-linear-to-br ${stat.bgGradient} backdrop-blur-xl border border-white/20 rounded-2xl p-2 sm:p-3 md:p-4 text-center hover:shadow-2xl transition-all duration-300 group-hover:scale-105 max-w-xs mx-auto`}>
                     {/* Top accent line */}
-                    <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-16 h-1 bg-gradient-to-r ${stat.gradient} rounded-full`} />
+                    <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 sm:w-12 sm:h-0.5 md:w-16 md:h-1 bg-linear-to-r ${stat.gradient} rounded-full`} />
 
                     {/* Icon */}
-                    <div className={`inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br ${stat.gradient} rounded-2xl mb-4 shadow-lg transform group-hover:-translate-y-2 transition-transform duration-300`}>
-                      <IconComponent className="h-5 w-5 md:h-7 md:w-7 text-white" />
+                    <div className={`inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-linear-to-br ${stat.gradient} rounded-2xl mb-2 sm:mb-3 shadow-lg transform group-hover:-translate-y-2 transition-transform duration-300`}>
+                      <IconComponent className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5 text-white" />
                     </div>
 
                     {/* Value */}
-                    <p className={`text-4xl md:text-5xl font-bold bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent mb-2`}>
+                    <p className={`text-2xl sm:text-3xl md:text-4xl font-bold bg-linear-to-r ${stat.gradient} bg-clip-text text-transparent mb-1`}>
                       {stat.value}
                     </p>
 
                     {/* Label */}
-                    <p className="text-foreground font-semibold text-base md:text-lg mb-2">{stat.label}</p>
+                    <p className="text-foreground font-semibold text-[10px] sm:text-xs md:text-sm mb-1">{stat.label}</p>
                     
                     {/* Decorative dots */}
-                    <div className="flex justify-center gap-1 mt-4">
+                    <div className="flex justify-center gap-0.5 mt-2">
                       {[0, 1, 2].map((dot) => (
                         <div
                           key={dot}
-                          className={`w-2 h-2 rounded-full bg-gradient-to-r ${stat.gradient} opacity-60`}
+                          className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-linear-to-r ${stat.gradient} opacity-60`}
                         />
                       ))}
                     </div>
@@ -181,14 +182,14 @@ export function TaxiPageClient({ vehicles, routes }: TaxiPageClientProps) {
 
       {/* Vehicle Types */}
       {vehicles.length > 0 && (
-        <section className="py-16 bg-muted/30">
+        <section className="py-8 bg-muted/30">
           <div className="container mx-auto px-4">
             <motion.div
               variants={slideInLeft}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="text-center mb-12"
+              className="text-center mb-8 md:mb-10"
             >
               <h2 className="text-3xl font-serif font-bold text-foreground mb-4">Choose Your Vehicle</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -218,7 +219,7 @@ export function TaxiPageClient({ vehicles, routes }: TaxiPageClientProps) {
 
       {/* Popular Routes */}
       {routes.length > 0 && (
-        <section className="py-16">
+        <section className="py-8">
           <div className="container mx-auto px-4">
             <motion.div
               variants={slideInRight}
@@ -252,25 +253,45 @@ export function TaxiPageClient({ vehicles, routes }: TaxiPageClientProps) {
       <section className="py-16 bg-muted/30" id="book">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            <motion.div variants={slideInLeft} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <h2 className="text-3xl font-serif font-bold text-foreground mb-4">Get Your Quote</h2>
-              <p className="text-muted-foreground mb-6">
-                Fill in your travel details and we will get back to you with the best options. No advance payment
-                required - pay after your trip!
-              </p>
-              <div className="space-y-4">
-                {[
-                  { icon: <Car className="h-5 w-5" />, text: "Wide range of vehicles for every need" },
-                  { icon: <Calendar className="h-5 w-5" />, text: "Flexible booking and cancellation" },
-                  { icon: <Shield className="h-5 w-5" />, text: "Verified drivers and sanitized cars" },
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary">
-                      {item.icon}
+            <motion.div
+              variants={slideInLeft}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="flex flex-col gap-6 lg:gap-8"
+            >
+              <div className="relative w-full h-56 sm:h-64 md:h-72 rounded-2xl overflow-hidden shadow-xl">
+                <Image
+                  src="https://res.cloudinary.com/dabqqymqe/image/upload/v1765972287/uc6q1azohh0a4k4xv72i.jpg"
+                  alt="Mountain taxi ride"
+                  fill
+                  className="object-cover"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  priority
+                />
+                <div className="absolute inset-0 bg-linear-to-tr from-forest-green/25 via-transparent to-saffron/20" />
+              </div>
+
+              <div className="lg:mt-auto">
+                <h2 className="text-3xl font-serif font-bold text-foreground mb-3 lg:mb-4">Get Your Quote</h2>
+                <p className="text-muted-foreground mb-5 lg:mb-6">
+                  Fill in your travel details and we will get back to you with the best options. No advance payment
+                  required - pay after your trip!
+                </p>
+                <div className="space-y-3 lg:space-y-4">
+                  {[
+                    { icon: <Car className="h-5 w-5" />, text: "Wide range of vehicles for every need" },
+                    { icon: <Calendar className="h-5 w-5" />, text: "Flexible booking and cancellation" },
+                    { icon: <Shield className="h-5 w-5" />, text: "Verified drivers and sanitized cars" },
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+                        {item.icon}
+                      </div>
+                      <span className="text-foreground">{item.text}</span>
                     </div>
-                    <span className="text-foreground">{item.text}</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </motion.div>
 
@@ -280,7 +301,7 @@ export function TaxiPageClient({ vehicles, routes }: TaxiPageClientProps) {
       </section>
 
       {/* Safety Features */}
-      <section className="py-16">
+      <section className="py-8">
         <div className="container mx-auto px-4">
           <motion.div
             variants={fadeInUp}
@@ -299,14 +320,14 @@ export function TaxiPageClient({ vehicles, routes }: TaxiPageClientProps) {
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 bg-muted/30">
+      <section className="py-8 bg-muted/30">
         <div className="container mx-auto px-4">
           <TaxiTestimonials />
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="py-16">
+      <section className="py-8">
         <div className="container mx-auto px-4">
           <motion.div
             variants={fadeInUp}

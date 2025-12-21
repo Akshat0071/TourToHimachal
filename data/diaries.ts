@@ -583,18 +583,5 @@ The trail doesn't end. It just waits for the next traveler to find it.
 ]
 
 export const diaryTags = ["spiritual", "trek", "adventure", "honeymoon", "family"]
-export const diaryMonths = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-]
+export const diaryMonths = ["Spring", "Summer", "Autumn", "Winter"]
 export const diaryRegions = ["Spiti", "Dharamshala", "Kullu", "Manali", "Kangra", "Shimla"]

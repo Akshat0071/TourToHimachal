@@ -65,10 +65,10 @@ export function TravelDiariesClient({ blogs }: TravelDiariesClientProps) {
       : fallbackBlogs
 
   return (
-    <section className="py-16 md:py-24 lg:py-32 bg-gradient-to-br from-background via-[oklch(0.97_0.02_85)] to-background relative overflow-hidden">
+    <section className="py-12 md:py-16 lg:py-20 bg-linear-to-br from-background via-[oklch(0.97_0.02_85)] to-background relative overflow-hidden">
       {/* Background decorations */}
-      <div className="absolute top-20 right-10 md:right-20 w-48 md:w-64 h-48 md:h-64 bg-gradient-to-br from-golden-yellow/20 to-saffron/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 left-10 md:left-20 w-36 md:w-48 h-36 md:h-48 bg-gradient-to-tr from-mountain-blue/15 to-forest-green/15 rounded-full blur-3xl" />
+      <div className="absolute top-20 right-10 md:right-20 w-48 md:w-64 h-48 md:h-64 bg-linear-to-br from-golden-yellow/20 to-saffron/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 left-10 md:left-20 w-36 md:w-48 h-36 md:h-48 bg-linear-to-tr from-mountain-blue/15 to-forest-green/15 rounded-full blur-3xl" />
 
       <div className="container mx-auto px-4 relative">
         <motion.div
@@ -93,7 +93,7 @@ export function TravelDiariesClient({ blogs }: TravelDiariesClientProps) {
               className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-foreground mt-2 md:mt-3"
             >
               Travel{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-forest-green to-mountain-blue">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-forest-green to-mountain-blue">
                 Diaries
               </span>
             </motion.h2>
@@ -123,7 +123,7 @@ export function TravelDiariesClient({ blogs }: TravelDiariesClientProps) {
           {displayBlogs.map((blog, index) => (
             <motion.article key={blog.title} variants={fadeInUp} className="group">
               <Link href={`/blog/${blog.slug}`} className="block">
-                <div className="bg-gradient-to-br from-[oklch(0.99_0.015_145)] to-[oklch(0.97_0.02_130)] rounded-2xl md:rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 border border-forest-green/10 hover:border-forest-green/30">
+                <div className="bg-linear-to-br from-[oklch(0.99_0.015_145)] to-[oklch(0.97_0.02_130)] rounded-2xl md:rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 border border-forest-green/10 hover:border-forest-green/30">
                   {/* Image container with hover effect */}
                   <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
                     <Image
@@ -133,11 +133,11 @@ export function TravelDiariesClient({ blogs }: TravelDiariesClientProps) {
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                     {/* Category badge */}
                     {index === 0 && (
-                      <div className="absolute top-3 md:top-4 left-3 md:left-4 px-2.5 md:px-3 py-1 bg-gradient-to-r from-forest-green to-mountain-blue text-white text-xs font-bold rounded-full">
+                      <div className="absolute top-3 md:top-4 left-3 md:left-4 px-2.5 md:px-3 py-1 bg-linear-to-r from-forest-green to-mountain-blue text-white text-xs font-bold rounded-full">
                         FEATURED
                       </div>
                     )}

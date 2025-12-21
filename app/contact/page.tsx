@@ -40,11 +40,12 @@ export default function ContactPage() {
 
               {/* Contact Form - Shows SECOND on mobile */}
               <div className="lg:col-span-3 order-2 lg:order-1">
+                {/* Heading moved outside the form card */}
+                <h2 className="text-xl sm:text-2xl font-serif font-bold text-foreground mb-2">Send Us a Message</h2>
+                <p className="text-muted-foreground mb-4 sm:mb-6 text-sm sm:text-base">
+                  Fill out the form below and we&apos;ll get back to you within 12 hours.
+                </p>
                 <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 md:p-8">
-                  <h2 className="text-xl sm:text-2xl font-serif font-bold text-foreground mb-2">Send Us a Message</h2>
-                  <p className="text-muted-foreground mb-6 sm:mb-8 text-sm sm:text-base">
-                    Fill out the form below and we&apos;ll get back to you within 12 hours.
-                  </p>
                   <ContactForm />
                 </div>
               </div>

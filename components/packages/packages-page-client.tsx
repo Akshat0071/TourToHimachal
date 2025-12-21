@@ -140,7 +140,8 @@ export function PackagesPageClient({ packages }: PackagesPageClientProps) {
         subtitle="From snow-capped peaks to ancient temples, from thrilling adventures to serene retreats — discover curated journeys that transform travelers into storytellers. Every package is designed with love, local expertise, and a passion for creating memories that last a lifetime."
       />
 
-      <section className="bg-background/95 border-b border-border py-3 sm:py-4">
+      {/* Mobile Filter Bar - Visible only on mobile/tablet */}
+      <section className="lg:hidden bg-background/95 border-b border-border py-3 sm:py-4">
         <div className="container mx-auto px-4">
           <PackageFilter
             searchQuery={searchQuery}
@@ -161,54 +162,81 @@ export function PackagesPageClient({ packages }: PackagesPageClientProps) {
         </div>
       </section>
 
-      {/* Packages Grid */}
+      {/* Packages Grid with Desktop Sidebar */}
       <section className="py-6 sm:py-8 md:py-12 lg:py-16 bg-linear-to-b from-background via-[oklch(0.97_0.02_85)] to-background">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8">
-            <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
-              Showing <span className="font-semibold text-saffron">{displayedPackages.length}</span> of{" "}
-              <span className="font-semibold">{filteredPackages.length}</span> packages
-            </p>
-          </div>
-
-          {filteredPackages.length === 0 ? (
-            <div className="text-center py-8 sm:py-12 md:py-16 bg-linear-to-br from-muted/50 to-muted/30 rounded-2xl sm:rounded-3xl">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 bg-saffron/10 rounded-full flex items-center justify-center">
-                <MapPin className="h-8 w-8 sm:h-10 sm:w-10 text-saffron" />
+          <div className="lg:grid lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_380px] lg:gap-8">
+            {/* Main Content */}
+            <div>
+              <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8">
+                <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
+                  Showing <span className="font-semibold text-saffron">{displayedPackages.length}</span> of{" "}
+                  <span className="font-semibold">{filteredPackages.length}</span> packages
+                </p>
               </div>
-              <h3 className="text-base sm:text-lg md:text-xl font-semibold text-foreground mb-2">No packages found</h3>
-              <p className="text-muted-foreground mb-4 text-xs sm:text-sm md:text-base">
-                Try adjusting your filters or search query
-              </p>
-              <Button onClick={clearFilters} variant="gradient" className="rounded-full text-sm">
-                Clear All Filters
-              </Button>
-            </div>
-          ) : (
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              animate="visible"
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
-            >
-              {displayedPackages.map((pkg) => (
-                <PackageCard key={pkg.id} pkg={pkg} />
-              ))}
-            </motion.div>
-          )}
 
-          {hasMore && (
-            <div className="text-center mt-6 sm:mt-8 md:mt-12">
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={() => setVisibleCount((prev) => prev + ITEMS_PER_PAGE)}
-                className="rounded-full border-2 border-saffron text-saffron hover:bg-saffron hover:text-white text-sm sm:text-base"
-              >
-                Load More Packages
-              </Button>
+              {filteredPackages.length === 0 ? (
+                <div className="text-center py-8 sm:py-12 md:py-16 bg-linear-to-br from-muted/50 to-muted/30 rounded-2xl sm:rounded-3xl">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 bg-saffron/10 rounded-full flex items-center justify-center">
+                    <MapPin className="h-8 w-8 sm:h-10 sm:w-10 text-saffron" />
+                  </div>
+                  <h3 className="text-base sm:text-lg md:text-xl font-semibold text-foreground mb-2">No packages found</h3>
+                  <p className="text-muted-foreground mb-4 text-xs sm:text-sm md:text-base">
+                    Try adjusting your filters or search query
+                  </p>
+                  <Button onClick={clearFilters} variant="gradient" className="rounded-full text-sm">
+                    Clear All Filters
+                  </Button>
+                </div>
+              ) : (
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  animate="visible"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6"
+                >
+                  {displayedPackages.map((pkg) => (
+                    <PackageCard key={pkg.id} pkg={pkg} />
+                  ))}
+                </motion.div>
+              )}
+
+              {hasMore && (
+                <div className="text-center mt-6 sm:mt-8 md:mt-12">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={() => setVisibleCount((prev) => prev + ITEMS_PER_PAGE)}
+                    className="rounded-full border-2 border-saffron text-saffron hover:bg-saffron hover:text-white text-sm sm:text-base"
+                  >
+                    Load More Packages
+                  </Button>
+                </div>
+              )}
             </div>
-          )}
+
+            {/* Desktop Sidebar - Visible only on desktop */}
+            <aside className="hidden lg:block">
+              <div className="sticky top-28">
+                <PackageFilter
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  selectedRegion={selectedRegion}
+                  setSelectedRegion={setSelectedRegion}
+                  selectedDuration={selectedDuration}
+                  setSelectedDuration={setSelectedDuration}
+                  selectedTheme={selectedTheme}
+                  setSelectedTheme={setSelectedTheme}
+                  selectedPrice={selectedPrice}
+                  setSelectedPrice={setSelectedPrice}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  onClearFilters={clearFilters}
+                  hasActiveFilters={hasActiveFilters}
+                />
+              </div>
+            </aside>
+          </div>
         </div>
       </section>
 

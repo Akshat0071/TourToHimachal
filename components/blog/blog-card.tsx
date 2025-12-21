@@ -46,7 +46,7 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
 
   if (featured) {
     return (
-      <motion.article variants={fadeInUp}>
+      <motion.article variants={fadeInUp} initial="hidden" animate="visible">
         <Link href={`/blog/${post.slug}`}>
           <motion.div
             className="group relative rounded-2xl md:rounded-3xl overflow-hidden"
@@ -99,10 +99,10 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
   }
 
   return (
-    <motion.article variants={fadeInUp}>
-      <Link href={`/blog/${post.slug}`}>
+    <motion.article variants={fadeInUp} initial="hidden" animate="visible">
+      <Link href={post.slug ? `/blog/${post.slug}` : "#"}>
         <motion.div
-          className="group bg-gradient-to-br from-[oklch(0.99_0.015_220)] to-[oklch(0.97_0.025_200)] rounded-2xl md:rounded-3xl overflow-hidden shadow-md h-full flex flex-col border-2 border-mountain-blue/10 hover:border-mountain-blue/30 hover:shadow-xl transition-all duration-300"
+          className="group bg-card bg-gradient-to-br from-[oklch(0.99_0.015_220)] to-[oklch(0.97_0.025_200)] rounded-2xl md:rounded-3xl overflow-hidden shadow-md h-full flex flex-col border border-border hover:border-mountain-blue/30 hover:shadow-xl transition-all duration-300"
           variants={cardHover}
           initial="rest"
           whileHover="hover"

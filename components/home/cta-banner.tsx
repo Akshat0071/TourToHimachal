@@ -14,7 +14,7 @@ export function CTABanner() {
 
   const ctaImage = ""
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden">
+    <section className="relative py-12 md:py-16 overflow-hidden">
       {/* Background image layer */}
       <img
         src={getImageUrl("https://res.cloudinary.com/dabqqymqe/image/upload/v1765967181/vor6a288gor8vhrmnej1.png")}
@@ -23,7 +23,7 @@ export function CTABanner() {
         className="absolute inset-0 w-full h-full object-cover"
       />
       {/* Background overlay gradient (semi-transparent so image shows) */}
-      <div className="absolute inset-0 bg-gradient-to-br from-mountain-blue/70 via-forest-green/50 to-mountain-blue/70" />
+      <div className="absolute inset-0 bg-linear-to-br from-mountain-blue/70 via-forest-green/50 to-mountain-blue/70" />
 
       {/* Decorative patterns */}
       <div className="absolute inset-0 opacity-10">

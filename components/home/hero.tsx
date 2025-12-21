@@ -170,20 +170,7 @@ export function Hero({ images }: HeroProps) {
         </div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.3 }}
-        className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 hidden sm:block"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
-          className="w-6 h-10 md:w-7 md:h-12 rounded-full border-2 border-golden-yellow/50 flex items-start justify-center p-2"
-        >
-          <motion.div className="w-1.5 h-2.5 md:w-2 md:h-3 bg-golden-yellow rounded-full" />
-        </motion.div>
-      </motion.div>
+      {/** Scroll indicator removed for cleaner hero UI */}
     </section>
   )
 }

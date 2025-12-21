@@ -74,10 +74,10 @@ export function ContactInfo() {
             target={item.href.startsWith("http") ? "_blank" : undefined}
             rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
             variants={fadeInUp}
-            className={`flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-br ${item.bgColor} border border-border hover:border-saffron/30 hover:shadow-lg transition-all group`}
+            className={`flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-linear-to-br ${item.bgColor} border border-border hover:border-saffron/30 hover:shadow-lg transition-all group`}
           >
             <div
-              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md`}
+              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-linear-to-br ${item.color} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md`}
             >
               <item.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
@@ -97,7 +97,7 @@ export function ContactInfo() {
       {/* Office Hours */}
       <motion.div
         variants={fadeInUp}
-        className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-mountain-blue/10 to-forest-green/5 border border-mountain-blue/20"
+        className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-linear-to-br from-mountain-blue/10 to-forest-green/5 border border-mountain-blue/20"
       >
         <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
           <div className="p-1.5 sm:p-2 bg-mountain-blue/20 rounded-lg">
@@ -118,7 +118,7 @@ export function ContactInfo() {
       {/* Response Time SLA */}
       <motion.div
         variants={fadeInUp}
-        className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-forest-green/10 to-golden-yellow/5 border border-forest-green/20"
+        className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-linear-to-br from-forest-green/10 to-golden-yellow/5 border border-forest-green/20"
       >
         <div className="flex items-center gap-2 sm:gap-3 mb-2">
           <div className="p-1.5 sm:p-2 bg-forest-green/20 rounded-lg">

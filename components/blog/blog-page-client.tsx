@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useRef } from "react"
+import { useState, useMemo, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Search } from "lucide-react"
 import { Header } from "@/components/home/header"
@@ -38,10 +38,32 @@ export function BlogPageClient({ blogs, categories }: BlogPageClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE)
+  
+  const handleCategoryClick = (category: string | null) => {
+    setSelectedCategory((prev) => {
+      // Toggle off if clicking the same category again
+      if (prev && category && prev.toLowerCase().trim() === category.toLowerCase().trim()) {
+        return null
+      }
+      return category
+    })
+    if (category === null) {
+      // Clear search when resetting to 'All' to avoid empty results
+      setSearchQuery("")
+    }
+  }
 
   const filteredPosts = useMemo(() => {
+    const normalizedSelected = selectedCategory?.toLowerCase().trim()
     return blogs.filter((post) => {
-      if (selectedCategory && post.category !== selectedCategory) return false
+      const postCategory = post.category?.toLowerCase().trim()
+      // Apply category filter only when a specific category is selected
+      if (normalizedSelected && normalizedSelected !== "all") {
+        if (!postCategory) return false
+        const matchExact = postCategory === normalizedSelected
+        const matchIncludes = postCategory.includes(normalizedSelected)
+        if (!(matchExact || matchIncludes)) return false
+      }
       if (searchQuery) {
         const query = searchQuery.toLowerCase()
         return (
@@ -54,8 +76,14 @@ export function BlogPageClient({ blogs, categories }: BlogPageClientProps) {
     })
   }, [blogs, selectedCategory, searchQuery])
 
-  const visiblePosts = filteredPosts.slice(0, visibleCount)
-  const hasMore = visibleCount < filteredPosts.length
+  const showAll = selectedCategory === null
+  const visiblePosts = showAll ? filteredPosts : filteredPosts.slice(0, visibleCount)
+  const hasMore = showAll ? false : visibleCount < filteredPosts.length
+
+  useEffect(() => {
+    // Reset pagination when filters change to avoid stale counts
+    setVisibleCount(ITEMS_PER_PAGE)
+  }, [selectedCategory, searchQuery])
 
 
   return (
@@ -72,7 +100,7 @@ export function BlogPageClient({ blogs, categories }: BlogPageClientProps) {
         {/* Featured section removed as requested */}
 
         {/* Main Content */}
-        <section className="py-10 md:py-16 bg-gradient-to-b from-background via-[oklch(0.97_0.02_85)] to-background">
+        <section className="relative z-10 py-10 md:py-16 bg-linear-to-b from-background via-[oklch(0.97_0.02_85)] to-background">
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
               {/* Main Column */}
@@ -97,10 +125,10 @@ export function BlogPageClient({ blogs, categories }: BlogPageClientProps) {
                     variant={selectedCategory === null ? "default" : "outline"}
                     className={`cursor-pointer shrink-0 rounded-full px-4 py-2 text-sm ${
                       selectedCategory === null
-                        ? "bg-gradient-to-r from-mountain-blue to-forest-green text-white"
+                        ? "bg-linear-to-r from-mountain-blue to-forest-green text-white"
                         : "border-2 hover:bg-mountain-blue/10"
                     }`}
-                    onClick={() => setSelectedCategory(null)}
+                    onClick={() => handleCategoryClick(null)}
                   >
                     All
                   </Badge>
@@ -110,10 +138,10 @@ export function BlogPageClient({ blogs, categories }: BlogPageClientProps) {
                       variant={selectedCategory === category ? "default" : "outline"}
                       className={`cursor-pointer shrink-0 rounded-full px-4 py-2 text-sm ${
                         selectedCategory === category
-                          ? "bg-gradient-to-r from-mountain-blue to-forest-green text-white"
+                          ? "bg-linear-to-r from-mountain-blue to-forest-green text-white"
                           : "border-2 hover:bg-mountain-blue/10"
                       }`}
-                      onClick={() => setSelectedCategory(category)}
+                      onClick={() => handleCategoryClick(category)}
                     >
                       {category}
                     </Badge>
@@ -122,11 +150,18 @@ export function BlogPageClient({ blogs, categories }: BlogPageClientProps) {
 
                 {/* Posts Grid */}
                 <motion.div
+                  key={`${selectedCategory ?? 'all'}-${searchQuery}-${visibleCount}`}
                   variants={staggerContainer}
                   initial="hidden"
                   animate="visible"
-                  className="grid sm:grid-cols-2 gap-4 md:gap-6"
+                  className="relative z-10 grid sm:grid-cols-2 gap-4 md:gap-6"
                 >
+                  {/* Status helper */}
+                  {filteredPosts.length > 0 && (
+                    <div className="sm:col-span-2 text-xs md:text-sm text-muted-foreground">
+                      Showing <span className="font-semibold text-saffron">{visiblePosts.length}</span> of {filteredPosts.length}
+                    </div>
+                  )}
                   {visiblePosts.map((post) => (
                     <BlogCard key={post.slug} post={post} />
                   ))}
@@ -134,7 +169,7 @@ export function BlogPageClient({ blogs, categories }: BlogPageClientProps) {
 
                 {/* No Results */}
                 {filteredPosts.length === 0 && (
-                  <div className="text-center py-12 md:py-16 bg-gradient-to-br from-muted/50 to-muted/30 rounded-3xl">
+                  <div className="text-center py-12 md:py-16 bg-linear-to-br from-muted/50 to-muted/30 rounded-3xl">
                     <p className="text-muted-foreground mb-4">No posts found matching your search.</p>
                     <Button
                       variant="outline"

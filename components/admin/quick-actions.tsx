@@ -33,13 +33,13 @@ export function QuickActions() {
               href={action.href}
               className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg hover:bg-muted transition-colors group w-full xs:w-auto"
             >
-              <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg ${action.color} flex items-center justify-center flex-shrink-0`}>
+              <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg ${action.color} flex items-center justify-center shrink-0`}>
                 <action.icon className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <span className="font-medium text-xs sm:text-sm text-foreground group-hover:text-primary transition-colors truncate">
                 {action.label}
               </span>
-              <Plus className="w-3 h-3 sm:w-4 sm:h-4 ml-auto text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+              <Plus className="w-3 h-3 sm:w-4 sm:h-4 ml-auto text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
             </Link>
           </motion.div>
         ))}
