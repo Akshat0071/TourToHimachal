@@ -32,6 +32,11 @@ export function TaxiBookingForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [referenceNumber, setReferenceNumber] = useState<string | null>(null)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -103,6 +108,14 @@ export function TaxiBookingForm() {
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  if (!isMounted) {
+    return (
+      <div className="bg-card border border-border rounded-xl p-6 md:p-8 flex items-center justify-center min-h-[600px]">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    )
   }
 
   if (isSuccess) {

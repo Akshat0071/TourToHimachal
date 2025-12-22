@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import { contactFormSchema } from "@/lib/contact"
 
 export async function POST(request: NextRequest) {
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     // Insert the lead into the database
     const { data, error } = await supabase
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       .insert({
         name,
         phone,
-        email,
+        email: email || "noemail@himachalyatra.com",
         subject: subject || `${serviceType} inquiry`,
         message,
         service_type: serviceType,
@@ -50,12 +50,13 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (error) {
-      console.error("Supabase error:", error)
+      console.error("Supabase error:", JSON.stringify(error, null, 2))
       return NextResponse.json(
         {
           success: false,
           message: "Failed to save your inquiry. Please try again.",
           error: error.message,
+          details: error,
         },
         { status: 500 },
       )

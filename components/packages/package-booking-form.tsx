@@ -61,7 +61,7 @@ export function PackageBookingForm({ packageName, packagePrice, onSuccess }: Pac
         body: JSON.stringify({
           name: formData.name,
           phone: formData.phone,
-          email: formData.email || "",
+          email: formData.email || "noemail@himachalyatra.com",
           subject: `Package Booking: ${packageName}`,
           message: `Package: ${packageName}\nPrice: ₹${packagePrice.toLocaleString()}\nPreferred Date: ${formData.date}\nTravelers: ${formData.travelers || "Not specified"}\n\nAdditional Notes: ${formData.message || "None"}`,
           serviceType: "package",

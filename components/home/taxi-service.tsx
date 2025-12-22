@@ -38,7 +38,7 @@ export function TaxiService() {
       <div className="absolute top-0 right-0 w-1/3 md:w-1/2 h-full bg-linear-to-l from-forest-green/10 to-transparent" />
 
       <div className="container mx-auto px-4 relative">
-        <div className="grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-20 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-10 xl:gap-12 items-center max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -46,7 +46,7 @@ export function TaxiService() {
             variants={slideInLeft}
             className="relative order-1 lg:order-1"
           >
-            <div className="relative h-[280px] sm:h-[350px] md:h-[450px] lg:h-[600px] rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
+            <div className="relative h-[240px] sm:h-[300px] md:h-[380px] lg:h-[480px] rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
               <Image
                 src={getImageUrl("https://res.cloudinary.com/dabqqymqe/image/upload/v1765974268/zla7y765gubxllghbnc8.jpg")}
                 alt="Premium Taxi Service"
@@ -65,14 +65,14 @@ export function TaxiService() {
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              className="absolute -bottom-4 right-2 sm:right-4 md:-bottom-6 md:-right-6 lg:right-10 bg-linear-to-br from-card to-[oklch(0.98_0.02_145)] p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl md:rounded-3xl shadow-2xl border-2 border-forest-green/20"
+              className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 md:-bottom-8 md:-right-8 bg-linear-to-br from-card to-[oklch(0.98_0.02_145)] p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl md:rounded-3xl shadow-2xl border-2 border-forest-green/20"
             >
               <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-linear-to-br from-forest-green to-mountain-blue rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg">
                   <Shield className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8 text-white" />
                 </div>
                 <div>
-                  <p className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">500+</p>
+                  <p className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">20+</p>
                   <p className="text-[10px] sm:text-xs md:text-sm text-muted-foreground">Verified Drivers</p>
                 </div>
               </div>
@@ -84,7 +84,7 @@ export function TaxiService() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.6 }}
-              className="absolute top-4 -left-1 sm:top-6 sm:-left-2 md:top-10 md:-left-6 bg-linear-to-r from-saffron to-sunset-orange p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl md:rounded-2xl shadow-xl text-white hidden xs:block"
+              className="absolute top-4 left-4 sm:top-6 sm:left-6 md:top-8 md:left-8 bg-linear-to-r from-saffron to-sunset-orange p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl md:rounded-2xl shadow-xl text-white"
             >
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <CheckCircle2 className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
@@ -108,13 +108,13 @@ export function TaxiService() {
               </span>
             </div>
 
-            <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-foreground mt-1 sm:mt-2 md:mt-3 mb-2 sm:mb-3 md:mb-4">
+            <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-foreground mt-1 sm:mt-2 md:mt-3 mb-1.5 sm:mb-2 md:mb-3 leading-tight">
               Premium{" "}
               <span className="text-transparent bg-clip-text bg-linear-to-r from-forest-green to-mountain-blue">
                 Taxi Services
               </span>
             </h2>
-            <p className="text-muted-foreground mb-3 sm:mb-4 md:mb-5 text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed">
+            <p className="text-muted-foreground mb-3 sm:mb-4 md:mb-5 text-xs sm:text-sm md:text-base lg:text-lg leading-snug">
               Travel comfortably across Himachal Pradesh with our fleet of well-maintained vehicles and experienced
               local drivers who know every route like the back of their hand.
             </p>

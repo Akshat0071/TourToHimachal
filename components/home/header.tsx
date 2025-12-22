@@ -77,11 +77,7 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled || isMobileMenuOpen
-          ? "bg-white shadow-lg border-b border-border"
-          : "bg-transparent"
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-white/95 backdrop-blur-md shadow-sm border-b border-border"
     >
       <div className="container mx-auto px-4">
         <div className="flex h-16 md:h-20 items-center justify-between">
@@ -93,11 +89,7 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:bg-white/10 ${
-                  isScrolled
-                    ? "text-foreground hover:text-saffron hover:bg-saffron/10"
-                    : "text-white hover:text-golden-yellow"
-                }`}
+                className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 text-foreground hover:text-saffron hover:bg-saffron/10"
               >
                 {link.label}
               </Link>
@@ -119,15 +111,11 @@ export function Header() {
 
           {/* Mobile Menu Toggle */}
           <button
-            className={`lg:hidden p-2.5 md:p-3 rounded-full transition-all ${
-              isScrolled || isMobileMenuOpen
-                ? "bg-muted hover:bg-saffron/10"
-                : "bg-white/10 backdrop-blur-sm hover:bg-white/20"
-            }`}
+            className="lg:hidden p-2.5 md:p-3 rounded-full transition-all bg-muted hover:bg-saffron/10"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
-            <Menu className={`h-5 w-5 ${isScrolled || isMobileMenuOpen ? "text-foreground" : "text-white"}`} />
+            <Menu className="h-5 w-5 text-foreground" />
           </button>
         </div>
       </div>
@@ -141,7 +129,7 @@ export function Header() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm lg:hidden z-100"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm lg:hidden z-[100]"
               onClick={() => setIsMobileMenuOpen(false)}
             />
 
@@ -150,13 +138,13 @@ export function Header() {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "100%", opacity: 1 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed top-0 bottom-0 right-0 w-[80%] max-w-sm bg-white lg:hidden z-101 shadow-2xl"
+              className="fixed top-0 bottom-0 right-0 w-[80%] max-w-sm bg-white lg:hidden z-[101] shadow-2xl flex flex-col h-[100dvh]"
             >
               {/* Decorative gradient top */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-saffron via-golden-yellow to-forest-green" />
 
               {/* Header with logo and close button */}
-              <div className="flex items-center justify-between p-4 border-b border-border bg-white">
+              <div className="flex items-center justify-between p-4 border-b border-border bg-white shrink-0">
                 <Logo size="sm" href="/" onClick={() => setIsMobileMenuOpen(false)} forceColors={true} />
 
                 {/* Close button */}
@@ -170,9 +158,9 @@ export function Header() {
               </div>
 
               {/* Navigation */}
-              <div className="flex flex-col h-[calc(100%-80px)] p-4 sm:p-6 bg-white">
+              <div className="flex flex-col flex-1 p-4 sm:p-6 bg-white overflow-y-auto relative">
                 {/* Decorative element */}
-                <div className="absolute top-20 right-0 w-32 h-32 bg-linear-to-bl from-saffron/10 to-transparent rounded-bl-full" />
+                <div className="absolute top-20 right-0 w-32 h-32 bg-linear-to-bl from-saffron/10 to-transparent rounded-bl-full pointer-events-none" />
 
                 <nav className="flex flex-col gap-1">
                   {navLinks.map((link, index) => (

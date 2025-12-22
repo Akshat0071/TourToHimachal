@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { Phone, Mail, MapPin, Facebook, Instagram, Twitter, Youtube, Heart, ArrowRight } from "lucide-react"
 import { useSettings } from "@/lib/settings-context"
 
@@ -61,19 +62,17 @@ export function Footer() {
             {/* Brand */}
             <div className="sm:col-span-2 lg:col-span-1">
               <Link href="/" className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 group">
-                <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-saffron to-sunset-orange group-hover:scale-110 transition-transform">
-                  <svg
-                    viewBox="0 0 40 40"
-                    fill="none"
-                    className="h-5 w-5 sm:h-6 sm:w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle cx="28" cy="12" r="5" fill="#FFD700" className="opacity-90" />
-                    <path d="M20 8L32 28H8L20 8Z" fill="white" />
-                    <path d="M12 16L22 28H2L12 16Z" fill="white" className="opacity-80" />
-                    <path d="M20 8L24 14H16L20 8Z" fill="#fff" />
-                  </svg>
+                <div className="relative w-56 h-16 sm:w-72 sm:h-20 p-0 rounded-xl group-hover:scale-105 transition-transform">
+                  <Image
+                    src="/Images/logowhite.webp"
+                    alt="TourToHimachal Logo"
+                    fill
+                    className="object-contain object-left"
+                  />
+                  {/* SVG Logo - Commented out
+                  <svg ... /> */}
                 </div>
+                {/* Text Hidden - Replaced by Logo Image
                 <div>
                   <span className="text-lg sm:text-xl font-serif font-bold">
                     <span className="text-saffron">Tour</span>
@@ -84,6 +83,7 @@ export function Footer() {
                     YOUR HIMALAYAN JOURNEY
                   </span>
                 </div>
+                */}
               </Link>
               <p className="text-slate-400 mb-4 sm:mb-6 leading-relaxed text-xs sm:text-sm md:text-base">
                 {settings?.about_text ||
