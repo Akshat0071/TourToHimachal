@@ -78,10 +78,15 @@ export function PackagesPageClient({ packages }: PackagesPageClientProps) {
 
     if (selectedPrice !== "All") {
       result = result.filter((pkg) => {
-        if (selectedPrice === "Under ₹10,000") return pkg.price < 10000
-        if (selectedPrice === "₹10,000 - ₹25,000") return pkg.price >= 10000 && pkg.price <= 25000
-        if (selectedPrice === "₹25,000 - ₹50,000") return pkg.price > 25000 && pkg.price <= 50000
-        if (selectedPrice === "Above ₹50,000") return pkg.price > 50000
+        if (selectedPrice.startsWith("Up to")) {
+          const maxPrice = Number(selectedPrice.replace(/[^0-9]/g, ""))
+          return pkg.price <= maxPrice
+        }
+        // Fallback for any legacy buckets if needed, or just standard check
+        if (selectedPrice === "Under ₹2,500") return pkg.price < 2500
+        if (selectedPrice === "₹2,500 - ₹5,000") return pkg.price >= 2500 && pkg.price <= 5000
+        if (selectedPrice === "₹5,000 - ₹7,500") return pkg.price > 5000 && pkg.price <= 7500
+        if (selectedPrice === "Above ₹7,500") return pkg.price > 7500
         return true
       })
     }

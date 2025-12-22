@@ -43,7 +43,7 @@ const themes = [
 
 export function TravelThemes() {
   return (
-    <section className="py-12 md:py-16 bg-linear-to-b from-muted/50 to-background relative overflow-hidden">
+    <section className="pt-4 pb-8 md:pt-8 md:pb-12 bg-linear-to-b from-muted/50 to-background relative overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute top-20 left-10 w-20 h-20 border-4 border-saffron/20 rounded-full" />
       <div className="absolute bottom-20 right-10 w-32 h-32 border-4 border-forest-green/20 rounded-full" />

@@ -51,7 +51,7 @@ const features = [
 
 export function WhyChooseUs() {
   return (
-    <section className="py-12 md:py-16 lg:py-20 bg-gradient-to-br from-[oklch(0.97_0.035_85)] via-[oklch(0.98_0.02_75)] to-[oklch(0.96_0.03_65)] relative overflow-hidden">
+    <section className="py-8 md:py-8 lg:py-12 bg-gradient-to-br from-[oklch(0.97_0.035_85)] via-[oklch(0.98_0.02_75)] to-[oklch(0.96_0.03_65)] relative overflow-hidden">
       {/* Decorative patterns */}
       <div className="absolute inset-0 pattern-dots opacity-20" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-saffron to-transparent" />

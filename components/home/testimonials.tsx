@@ -1,56 +1,65 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { Star, ChevronLeft, ChevronRight, Quote, MessageSquare } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { fadeInUp, staggerContainer } from "@/lib/animation-variants"
+import { createClient } from "@/lib/supabase/client"
+import { ReviewForm } from "./review-form"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 
-const testimonials = [
-  {
-    name: "Priya Sharma",
-    city: "Delhi",
-    image: "/indian-woman-portrait.png",
-    rating: 5,
-    review:
-      "Amazing experience! The taxi service was punctual and the driver knew all the scenic routes. Our Manali trip was unforgettable.",
-  },
-  {
-    name: "Rahul Verma",
-    city: "Mumbai",
-    image: "/indian-man-portrait.png",
-    rating: 5,
-    review:
-      "Booked the spiritual tour package for my parents. They were so happy with the arrangements. Highly recommended!",
-  },
-  {
-    name: "Anita Gupta",
-    city: "Bangalore",
-    image: "/indian-woman-smiling.png",
-    rating: 5,
-    review: "Best honeymoon package! Everything was perfectly planned. The Shimla-Manali circuit was breathtaking.",
-  },
-  {
-    name: "Vikram Singh",
-    city: "Chandigarh",
-    image: "/indian-man-smiling.png",
-    rating: 5,
-    review: "The Spiti Valley trip was life-changing. Great local knowledge and support throughout the journey.",
-  },
-  {
-    name: "Meera Krishnan",
-    city: "Chennai",
-    image: "/indian-woman-professional.png",
-    rating: 5,
-    review: "Fantastic family trip to Dharamshala. Kids loved every moment. Will definitely book again!",
-  },
-]
+// Static backup if needed, or initial state
+// const testimonials = [...]
+
+interface Review {
+  id: string
+  name: string
+  city?: string
+  image_url?: string
+  rating: number
+  review_text: string
+  created_at: string
+}
+
 
 export function Testimonials() {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+  const fetchReviews = async () => {
+    try {
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from("reviews")
+        .select("*")
+        .eq("is_approved", true)
+        .order("created_at", { ascending: false })
+
+      if (error) {
+        console.error("Error fetching reviews:", error)
+        return
+      }
+
+      if (data) {
+        setReviews(data)
+      }
+    } catch (error) {
+      console.error("Error in fetchReviews:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchReviews()
+  }, [])
+
 
   const checkScroll = () => {
     if (scrollRef.current) {
@@ -72,7 +81,7 @@ export function Testimonials() {
   }
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 bg-gradient-to-br from-[oklch(0.96_0.03_220)] via-[oklch(0.97_0.02_200)] to-[oklch(0.98_0.025_180)] relative overflow-hidden">
+    <section className="py-8 md:py-8 lg:py-12 bg-gradient-to-br from-[oklch(0.96_0.03_220)] via-[oklch(0.97_0.02_200)] to-[oklch(0.98_0.025_180)] relative overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute top-10 right-10 w-32 md:w-40 h-32 md:h-40 bg-gradient-to-br from-golden-yellow/30 to-saffron/30 rounded-full blur-3xl" />
       <div className="absolute bottom-10 left-10 w-48 md:w-60 h-48 md:h-60 bg-gradient-to-tr from-mountain-blue/20 to-forest-green/20 rounded-full blur-3xl" />
@@ -125,6 +134,18 @@ export function Testimonials() {
             >
               <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
             </Button>
+            <div className="ml-4">
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button className="bg-mountain-blue text-white hover:bg-mountain-blue/90">
+                    Write a Review
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-[95vw] md:max-w-md max-h-[90vh] overflow-y-auto rounded-2xl p-4 sm:p-6">
+                  <ReviewForm onSuccess={() => setIsDialogOpen(false)} />
+                </DialogContent>
+              </Dialog>
+            </div>
           </motion.div>
         </motion.div>
 
@@ -134,50 +155,77 @@ export function Testimonials() {
           className="flex gap-4 md:gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory -mx-4 px-4"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={testimonial.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="shrink-0 w-[280px] sm:w-[320px] md:w-[380px] lg:w-[400px] bg-gradient-to-br from-[oklch(0.99_0.015_85)] to-[oklch(0.97_0.025_70)] p-5 md:p-8 rounded-2xl md:rounded-3xl shadow-lg snap-start border-2 border-saffron/20 hover:border-saffron/40 transition-all duration-300 group hover:shadow-xl"
-            >
-              {/* Quote icon with gradient */}
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-gradient-to-br from-saffron/30 to-golden-yellow/30 flex items-center justify-center mb-4 md:mb-6 group-hover:from-saffron/40 group-hover:to-golden-yellow/40 transition-colors">
-                <Quote className="h-5 w-5 md:h-6 md:w-6 text-saffron" />
-              </div>
+          {reviews.length === 0 && !isLoading ? (
+            <div className="w-full text-center py-10 text-muted-foreground bg-white/50 rounded-xl">
+              <p>No reviews yet. Be the first to share your experience!</p>
+            </div>
+          ) : (
+            reviews.map((testimonial, index) => (
+              <motion.div
+                key={testimonial.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="shrink-0 w-[280px] sm:w-[320px] md:w-[350px] bg-white p-5 rounded-2xl shadow-sm border border-gray-100 snap-start transition-shadow hover:shadow-md"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    {/* Avatar */}
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-100 shrink-0">
+                      {testimonial.image_url ? (
+                        <Image
+                          src={testimonial.image_url}
+                          alt={testimonial.name}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-mountain-blue text-white font-bold text-lg">
+                          {testimonial.name.charAt(0)}
+                        </div>
+                      )}
+                    </div>
 
-              <p className="text-foreground mb-4 md:mb-6 leading-relaxed text-sm md:text-lg">{testimonial.review}</p>
-
-              <div className="flex items-center gap-3 md:gap-4">
-                {/* Avatar with border */}
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-saffron to-sunset-orange rounded-full blur-sm opacity-50" />
-                  <div className="relative w-11 h-11 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-white">
-                    <Image
-                      src={testimonial.image || "/placeholder.svg"}
-                      alt={testimonial.name}
-                      fill
-                      className="object-cover"
-                    />
+                    <div>
+                      <h4 className="font-bold text-gray-900 text-sm">{testimonial.name}</h4>
+                      <div className="flex gap-2 text-xs text-gray-500">
+                        {testimonial.city && (
+                          <>
+                            <span>{testimonial.city}</span>
+                            <span>•</span>
+                          </>
+                        )}
+                        <span>{testimonial.created_at ? new Date(testimonial.created_at).toLocaleDateString() : "Recent"}</span>
+                      </div>
+                    </div>
                   </div>
+
+                  {/* Google Logo */}
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                  </svg>
                 </div>
 
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-bold text-foreground text-sm md:text-base truncate">{testimonial.name}</h4>
-                  <p className="text-xs md:text-sm text-muted-foreground">{testimonial.city}</p>
-                </div>
-
-                {/* Star rating - hidden on very small screens */}
-                <div className="hidden xs:flex gap-0.5">
-                  {Array.from({ length: testimonial.rating }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 md:h-5 md:w-5 fill-golden-yellow text-golden-yellow" />
+                {/* Star rating */}
+                <div className="flex gap-1 mb-3">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-5 h-5 ${i < testimonial.rating ? "fill-[#F4B400] text-[#F4B400]" : "fill-gray-200 text-gray-200"}`}
+                    />
                   ))}
                 </div>
-              </div>
-            </motion.div>
-          ))}
+
+                {/* Review Text */}
+                <p className="text-gray-600 text-sm leading-relaxed line-clamp-4">
+                  {testimonial.review_text}
+                </p>
+              </motion.div>
+            )))}
         </div>
       </div>
     </section>

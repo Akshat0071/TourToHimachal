@@ -15,6 +15,7 @@ import {
   LogOut,
   Menu,
   X,
+  MessageSquare,
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -28,6 +29,7 @@ const navItems = [
   { href: "/admin/taxi", label: "Taxi", icon: Car },
   { href: "/admin/blogs", label: "Blogs", icon: FileText },
   { href: "/admin/diaries", label: "Travel Diaries", icon: BookOpen },
+  { href: "/admin/reviews", label: "Reviews", icon: MessageSquare },
   { href: "/admin/media", label: "Media Library", icon: ImageIcon },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ]

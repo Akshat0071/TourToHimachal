@@ -66,22 +66,21 @@ export function PackageForm({ initialData }: PackageFormProps) {
     seo_description: initialData?.seo_description || "",
   })
 
-  const [highlights, setHighlights] = useState<string[]>(initialData?.highlights || [])
-  const [inclusions, setInclusions] = useState<string[]>(initialData?.inclusions || [])
-  const [exclusions, setExclusions] = useState<string[]>(initialData?.exclusions || [])
+  // Use simple strings for the textarea inputs
+  const [highlightsText, setHighlightsText] = useState(initialData?.highlights?.join("\n") || "")
+  const [inclusionsText, setInclusionsText] = useState(initialData?.inclusions?.join("\n") || "")
+  const [exclusionsText, setExclusionsText] = useState(initialData?.exclusions?.join("\n") || "")
+
   const [images, setImages] = useState<string[]>(initialData?.images || [])
-  const [itinerary, setItinerary] = useState<Array<{day: number, title: string, description: string, activities: string[]}>>([])
-  const [newHighlight, setNewHighlight] = useState("")
-  const [newInclusion, setNewInclusion] = useState("")
-  const [newExclusion, setNewExclusion] = useState("")
+  const [itinerary, setItinerary] = useState<Array<{ day: number, title: string, description: string, activities: string[] }>>([])
 
   useEffect(() => {
     setIsClient(true)
     // Parse itinerary from initialData if it exists
     if (initialData && typeof initialData === 'object' && 'itinerary' in initialData && initialData.itinerary) {
       try {
-        const parsedItinerary = typeof initialData.itinerary === 'string' 
-          ? JSON.parse(initialData.itinerary) 
+        const parsedItinerary = typeof initialData.itinerary === 'string'
+          ? JSON.parse(initialData.itinerary)
           : initialData.itinerary
         if (Array.isArray(parsedItinerary)) {
           setItinerary(parsedItinerary)
@@ -106,20 +105,6 @@ export function PackageForm({ initialData }: PackageFormProps) {
       title,
       slug: prev.slug || generateSlug(title),
     }))
-  }
-
-  const addItem = (type: "highlights" | "inclusions" | "exclusions", value: string, setValue: (v: string) => void) => {
-    if (!value.trim()) return
-    if (type === "highlights") setHighlights((prev) => [...prev, value.trim()])
-    if (type === "inclusions") setInclusions((prev) => [...prev, value.trim()])
-    if (type === "exclusions") setExclusions((prev) => [...prev, value.trim()])
-    setValue("")
-  }
-
-  const removeItem = (type: "highlights" | "inclusions" | "exclusions", index: number) => {
-    if (type === "highlights") setHighlights((prev) => prev.filter((_, i) => i !== index))
-    if (type === "inclusions") setInclusions((prev) => prev.filter((_, i) => i !== index))
-    if (type === "exclusions") setExclusions((prev) => prev.filter((_, i) => i !== index))
   }
 
   const addItineraryDay = () => {
@@ -172,11 +157,16 @@ export function PackageForm({ initialData }: PackageFormProps) {
       const { createClient } = await import("@/lib/supabase/client")
       const supabase = createClient()
 
+      // Convert textarea strings back to arrays
+      const highlightsArray = highlightsText.split("\n").filter(line => line.trim())
+      const inclusionsArray = inclusionsText.split("\n").filter(line => line.trim())
+      const exclusionsArray = exclusionsText.split("\n").filter(line => line.trim())
+
       const packageData = {
         ...formData,
-        highlights,
-        inclusions,
-        exclusions,
+        highlights: highlightsArray,
+        inclusions: inclusionsArray,
+        exclusions: exclusionsArray,
         images,
         itinerary: itinerary.length > 0 ? itinerary : null,
         price: Number(formData.price),
@@ -340,127 +330,40 @@ export function PackageForm({ initialData }: PackageFormProps) {
           {/* Highlights */}
           <div className="space-y-2">
             <Label className="text-xs sm:text-sm">Highlights</Label>
-            <div className="flex flex-col xs:flex-row gap-2">
-              <Input
-                value={newHighlight}
-                onChange={(e) => setNewHighlight(e.target.value)}
-                placeholder="Add a highlight"
-                className="text-base sm:text-sm flex-1"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault()
-                    addItem("highlights", newHighlight, setNewHighlight)
-                  }
-                }}
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => addItem("highlights", newHighlight, setNewHighlight)}
-                className="w-full xs:w-auto"
-              >
-                <Plus className="w-4 h-4" />
-              </Button>
-            </div>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {highlights.map((item, index) => (
-                <motion.span
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm"
-                >
-                  {item}
-                  <button type="button" onClick={() => removeItem("highlights", index)} className="hover:text-red-500">
-                    <X className="w-3 h-3" />
-                  </button>
-                </motion.span>
-              ))}
-            </div>
+            <p className="text-xs text-muted-foreground mb-1">Enter each highlight on a new line.</p>
+            <Textarea
+              value={highlightsText}
+              onChange={(e) => setHighlightsText(e.target.value)}
+              placeholder="e.g. Visit Hadimba Temple&#10;Solang Valley Adventure&#10;Rohtang Pass Trip"
+              rows={4}
+              className="font-mono text-sm"
+            />
           </div>
 
           {/* Inclusions */}
           <div className="space-y-2">
             <Label className="text-xs sm:text-sm">Inclusions</Label>
-            <div className="flex flex-col xs:flex-row gap-2">
-              <Input
-                value={newInclusion}
-                onChange={(e) => setNewInclusion(e.target.value)}
-                placeholder="Add an inclusion"
-                className="text-base sm:text-sm flex-1"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault()
-                    addItem("inclusions", newInclusion, setNewInclusion)
-                  }
-                }}
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => addItem("inclusions", newInclusion, setNewInclusion)}
-                className="w-full xs:w-auto"
-              >
-                <Plus className="w-4 h-4" />
-              </Button>
-            </div>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {inclusions.map((item, index) => (
-                <motion.span
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="inline-flex items-center gap-1 bg-green-100 text-green-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm"
-                >
-                  {item}
-                  <button type="button" onClick={() => removeItem("inclusions", index)} className="hover:text-red-500">
-                    <X className="w-3 h-3" />
-                  </button>
-                </motion.span>
-              ))}
-            </div>
+            <p className="text-xs text-muted-foreground mb-1">Enter each inclusion on a new line.</p>
+            <Textarea
+              value={inclusionsText}
+              onChange={(e) => setInclusionsText(e.target.value)}
+              placeholder="e.g. 4 Nights Accommodation&#10;Breakfast and Dinner&#10;Private Cab for Sightseeing"
+              rows={4}
+              className="font-mono text-sm"
+            />
           </div>
 
           {/* Exclusions */}
           <div className="space-y-2">
             <Label className="text-xs sm:text-sm">Exclusions</Label>
-            <div className="flex flex-col xs:flex-row gap-2">
-              <Input
-                value={newExclusion}
-                onChange={(e) => setNewExclusion(e.target.value)}
-                placeholder="Add an exclusion"
-                className="text-base sm:text-sm flex-1"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault()
-                    addItem("exclusions", newExclusion, setNewExclusion)
-                  }
-                }}
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => addItem("exclusions", newExclusion, setNewExclusion)}
-                className="w-full xs:w-auto"
-              >
-                <Plus className="w-4 h-4" />
-              </Button>
-            </div>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {exclusions.map((item, index) => (
-                <motion.span
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="inline-flex items-center gap-1 bg-red-100 text-red-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm"
-                >
-                  {item}
-                  <button type="button" onClick={() => removeItem("exclusions", index)} className="hover:text-red-500">
-                    <X className="w-3 h-3" />
-                  </button>
-                </motion.span>
-              ))}
-            </div>
+            <p className="text-xs text-muted-foreground mb-1">Enter each exclusion on a new line.</p>
+            <Textarea
+              value={exclusionsText}
+              onChange={(e) => setExclusionsText(e.target.value)}
+              placeholder="e.g. Airfare / Train fare&#10;Lunch&#10;Personal Expenses"
+              rows={4}
+              className="font-mono text-sm"
+            />
           </div>
         </CardContent>
       </Card>
@@ -475,6 +378,7 @@ export function PackageForm({ initialData }: PackageFormProps) {
             <Label className="text-xs sm:text-sm">Upload Images (up to 5)</Label>
             {images.length < 5 && (
               <CloudinaryUploadWidget
+                key={images.length}
                 onUploadSuccess={(result: CloudinaryUploadResult) => {
                   setImages([...images, result.secure_url])
                   toast.success("Image uploaded successfully!")
@@ -550,7 +454,7 @@ export function PackageForm({ initialData }: PackageFormProps) {
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor={`day-${dayIndex}-title`}>Day Title *</Label>
                     <Input

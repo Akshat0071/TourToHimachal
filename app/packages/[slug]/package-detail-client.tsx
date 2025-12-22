@@ -65,16 +65,13 @@ export function PackageDetailClient({ pkg, allPackages }: PackageDetailClientPro
       </div>
 
       {/* Hero Slider */}
-      <section className="pb-8">
-        <div className="container mx-auto px-4">
-          <PackageHeroSlider images={pkg.images || []} title={pkg.title} pdfUrl={pkg.itinerary_pdf_url} />
-        </div>
-      </section>
+
 
       {/* Main Content */}
       <section className="py-8">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left Content */}
             {/* Left Content */}
             <div className="lg:col-span-2 space-y-12">
               {/* Package Summary */}
@@ -88,12 +85,18 @@ export function PackageDetailClient({ pkg, allPackages }: PackageDetailClientPro
                   )}
                 </div>
                 <h1 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-4">{pkg.title}</h1>
-                <div className="flex flex-wrap items-center gap-4 text-muted-foreground mb-4">
+                <div className="flex flex-wrap items-center gap-4 text-muted-foreground mb-6">
                   <div className="flex items-center gap-1">
                     <Clock className="h-5 w-5" />
                     <span>{pkg.duration}</span>
                   </div>
                 </div>
+
+                {/* Hero Slider placed between Title and Description */}
+                <div className="mb-8 rounded-xl overflow-hidden">
+                  <PackageHeroSlider images={pkg.images || []} title={pkg.title} pdfUrl={pkg.itinerary_pdf_url} />
+                </div>
+
                 <p className="text-muted-foreground text-lg leading-relaxed">{pkg.description}</p>
               </motion.div>
 
@@ -222,7 +225,7 @@ export function PackageDetailClient({ pkg, allPackages }: PackageDetailClientPro
                             Fill in your details and we'll get back to you within 12 hours.
                           </DialogDescription>
                         </DialogHeader>
-                        <PackageBookingForm packageName={pkg.title} packagePrice={pkg.price} onSuccess={() => {}} />
+                        <PackageBookingForm packageName={pkg.title} packagePrice={pkg.price} onSuccess={() => { }} />
                       </DialogContent>
                     </Dialog>
 

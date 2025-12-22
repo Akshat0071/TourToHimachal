@@ -65,7 +65,7 @@ export function TravelDiariesClient({ blogs }: TravelDiariesClientProps) {
       : fallbackBlogs
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 bg-linear-to-br from-background via-[oklch(0.97_0.02_85)] to-background relative overflow-hidden">
+    <section className="py-8 md:py-8 lg:py-12 bg-linear-to-br from-background via-[oklch(0.97_0.02_85)] to-background relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute top-20 right-10 md:right-20 w-48 md:w-64 h-48 md:h-64 bg-linear-to-br from-golden-yellow/20 to-saffron/20 rounded-full blur-3xl" />
       <div className="absolute bottom-20 left-10 md:left-20 w-36 md:w-48 h-36 md:h-48 bg-linear-to-tr from-mountain-blue/15 to-forest-green/15 rounded-full blur-3xl" />

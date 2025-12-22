@@ -3,30 +3,45 @@
 import { useState, useMemo } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { PenLine, Mail } from "lucide-react"
 import { Header } from "@/components/home/header"
 import { Footer } from "@/components/home/footer"
 import { StaticHero } from "@/components/ui/static-hero"
 import { DiaryCard } from "@/components/diaries/diary-card"
 import { DiaryFilter } from "@/components/diaries/diary-filter"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { fadeInUp, staggerContainer } from "@/lib/animation-variants"
+import { diaryAuthors, diaryRegions } from "@/data/diaries"
+
+interface DiaryAuthor {
+  name: string
+  avatar: string
+  bio: string
+  social: {
+    twitter?: string
+    instagram?: string
+  }
+}
 
 interface Diary {
-  id: string
+  id?: string
   title: string
   slug: string
   excerpt?: string
   content?: string
   cover_image?: string
+  coverImage?: string // Handle both casing from data vs interface
   author_name?: string
+  author?: DiaryAuthor
   author_avatar?: string
   destination?: string
+  region?: string
   travel_date?: string
+  date?: string
   published_at?: string
   created_at?: string
   gallery?: string[]
+  images?: string[]
+  tags?: string[]
 }
 
 interface DiariesPageClientProps {
@@ -37,39 +52,72 @@ const ITEMS_PER_PAGE = 6
 
 export function DiariesPageClient({ diaries }: DiariesPageClientProps) {
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedDestination, setSelectedDestination] = useState<string | null>(null)
-  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE)
+  const [selectedRegion, setSelectedRegion] = useState("All")
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null)
 
-  // Get unique destinations
-  const destinations = [...new Set(diaries.map((d) => d.destination).filter(Boolean))]
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE)
 
   const filteredDiaries = useMemo(() => {
     return diaries.filter((diary) => {
-      // Destination filter
-      if (selectedDestination && diary.destination !== selectedDestination) {
-        return false
-      }
-
-      // Search filter
+      // 1. Search Query
       if (searchQuery) {
         const query = searchQuery.toLowerCase()
-        return (
-          diary.title.toLowerCase().includes(query) ||
-          diary.excerpt?.toLowerCase().includes(query) ||
-          diary.destination?.toLowerCase().includes(query)
-        )
+        const title = diary.title?.toLowerCase() || ""
+        const excerpt = diary.excerpt?.toLowerCase() || ""
+        const region = (diary.region || diary.destination)?.toLowerCase() || ""
+
+        if (!title.includes(query) && !excerpt.includes(query) && !region.includes(query)) {
+          return false
+        }
       }
+
+      // 2. Region Filter
+      if (selectedRegion !== "All") {
+        const dRegion = diary.region || diary.destination
+        if (dRegion !== selectedRegion) return false
+      }
+
+      // 3. Tags Filter
+      if (selectedTags.length > 0) {
+        const dTags = diary.tags || []
+        // Match if diary contains ANY of the selected tags (OR logic)
+        const hasMatch = selectedTags.some(tag => dTags.includes(tag))
+        if (!hasMatch) return false
+      }
+
+      // 4. Month Filter (Season)
+      if (selectedMonth) {
+        // Rudimentary season check based on date month
+        // Spring: Mar-May, Summer: Jun-Aug, Autumn: Sep-Nov, Winter: Dec-Feb
+        const dDate = diary.date || diary.travel_date
+        if (dDate) {
+          const month = new Date(dDate).getMonth() // 0-11
+          let season = ""
+          if (month >= 2 && month <= 4) season = "Spring"
+          else if (month >= 5 && month <= 7) season = "Summer"
+          else if (month >= 8 && month <= 10) season = "Autumn"
+          else season = "Winter" // 11, 0, 1
+
+          if (season !== selectedMonth) return false
+        }
+      }
+
+
 
       return true
     })
-  }, [diaries, selectedDestination, searchQuery])
+  }, [diaries, searchQuery, selectedRegion, selectedTags, selectedMonth])
 
   const visibleDiaries = filteredDiaries.slice(0, visibleCount)
   const hasMore = visibleCount < filteredDiaries.length
 
   const clearFilters = () => {
-    setSelectedDestination(null)
     setSearchQuery("")
+    setSelectedRegion("All")
+    setSelectedTags([])
+    setSelectedMonth(null)
+
   }
 
   const loadMore = () => {
@@ -79,7 +127,7 @@ export function DiariesPageClient({ diaries }: DiariesPageClientProps) {
   return (
     <>
       <Header />
-      <main>
+      <main className="min-h-screen bg-background">
         <StaticHero
           image="/Images/diary.png"
           badge="Real Stories, Real Adventures"
@@ -91,13 +139,13 @@ export function DiariesPageClient({ diaries }: DiariesPageClientProps) {
         <section className="lg:hidden bg-background/95 border-b border-border py-3 sm:py-4">
           <div className="container mx-auto px-4">
             <DiaryFilter
-              selectedTags={selectedDestination ? [selectedDestination] : []}
-              selectedMonth={null}
-              selectedAuthor={null}
+              selectedRegion={selectedRegion}
+              selectedTags={selectedTags}
+              selectedMonth={selectedMonth}
               searchQuery={searchQuery}
-              onTagChange={(tags) => setSelectedDestination(tags[0] || null)}
-              onMonthChange={() => {}}
-              onAuthorChange={() => {}}
+              onRegionChange={setSelectedRegion}
+              onTagChange={setSelectedTags}
+              onMonthChange={setSelectedMonth}
               onSearchChange={setSearchQuery}
               onClearFilters={clearFilters}
             />
@@ -110,41 +158,26 @@ export function DiariesPageClient({ diaries }: DiariesPageClientProps) {
             <div className="lg:grid lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_380px] lg:gap-8">
               {/* Main Column */}
               <div>
-                {/* Filter Bar - Hidden on desktop */}
-                <div className="hidden lg:hidden">
-                  <DiaryFilter
-                  selectedTags={selectedDestination ? [selectedDestination] : []}
-                  selectedMonth={null}
-                  selectedAuthor={null}
-                  searchQuery={searchQuery}
-                  onTagChange={(tags) => setSelectedDestination(tags[0] || null)}
-                  onMonthChange={() => {}}
-                  onAuthorChange={() => {}}
-                    onSearchChange={setSearchQuery}
-                    onClearFilters={clearFilters}
-                  />
-                </div>
 
                 {/* Diaries Grid */}
-                <motion.div
-                  variants={staggerContainer}
-                  initial="hidden"
-                  animate="visible"
-                  className="grid grid-cols-1 sm:grid-cols-2 gap-6"
-                >
-                  {visibleDiaries.map((diary) => (
-                    <DiaryCard key={diary.slug} diary={diary} />
-                  ))}
-                </motion.div>
-
-                {/* No Results */}
-                {filteredDiaries.length === 0 && (
-                  <div className="text-center py-16">
+                {filteredDiaries.length === 0 ? (
+                  <div className="text-center py-16 bg-muted/30 rounded-3xl">
                     <p className="text-muted-foreground mb-4">No diaries found matching your filters.</p>
                     <Button variant="outline" onClick={clearFilters}>
                       Clear Filters
                     </Button>
                   </div>
+                ) : (
+                  <motion.div
+                    variants={staggerContainer}
+                    initial="hidden"
+                    animate="visible"
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+                  >
+                    {visibleDiaries.map((diary) => (
+                      <DiaryCard key={diary.slug} diary={diary} />
+                    ))}
+                  </motion.div>
                 )}
 
                 {/* Load More */}
@@ -168,71 +201,43 @@ export function DiariesPageClient({ diaries }: DiariesPageClientProps) {
                 <div className="sticky top-28 space-y-6">
                   {/* Filter Section */}
                   <DiaryFilter
-                    selectedTags={selectedDestination ? [selectedDestination] : []}
-                    selectedMonth={null}
-                    selectedAuthor={null}
+                    selectedRegion={selectedRegion}
+                    selectedTags={selectedTags}
+                    selectedMonth={selectedMonth}
                     searchQuery={searchQuery}
-                    onTagChange={(tags) => setSelectedDestination(tags[0] || null)}
-                    onMonthChange={() => {}}
-                    onAuthorChange={() => {}}
+                    onRegionChange={setSelectedRegion}
+                    onTagChange={setSelectedTags}
+                    onMonthChange={setSelectedMonth}
                     onSearchChange={setSearchQuery}
                     onClearFilters={clearFilters}
                   />
 
                   {/* Popular Diaries */}
                   {diaries.length > 0 && (
-                  <div className="bg-card rounded-xl p-6 shadow-md">
-                    <h3 className="text-lg font-serif font-bold text-foreground mb-4">Popular Stories</h3>
-                    <div className="space-y-4">
-                      {diaries.slice(0, 4).map((diary, index) => (
-                        <Link key={diary.slug} href={`/diaries/${diary.slug}`} className="flex gap-3 group">
-                          <span className="text-2xl font-bold text-muted-foreground/50 group-hover:text-saffron transition-colors">
-                            {String(index + 1).padStart(2, "0")}
-                          </span>
-                          <div>
-                            <h4 className="font-medium text-foreground group-hover:text-mountain-blue transition-colors line-clamp-2">
-                              {diary.title}
-                            </h4>
-                            <span className="text-sm text-muted-foreground">{diary.destination}</span>
-                          </div>
-                        </Link>
-                      ))}
+                    <div className="bg-card rounded-xl p-6 shadow-md border-2 border-muted/50">
+                      <h3 className="text-lg font-serif font-bold text-foreground mb-4">Popular Stories</h3>
+                      <div className="space-y-4">
+                        {diaries.slice(0, 4).map((diary, index) => (
+                          <Link key={diary.slug} href={`/diaries/${diary.slug}`} className="flex gap-3 group">
+                            <span className="text-2xl font-bold text-muted-foreground/30 group-hover:text-saffron transition-colors">
+                              {String(index + 1).padStart(2, "0")}
+                            </span>
+                            <div>
+                              <h4 className="font-medium text-foreground group-hover:text-mountain-blue transition-colors line-clamp-2 text-sm">
+                                {diary.title}
+                              </h4>
+                              <span className="text-xs text-muted-foreground">{diary.region || diary.destination}</span>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-
-                {/* Newsletter removed */}
-
-                {/* Destinations */}
-                {destinations.length > 0 && (
-                  <div className="bg-card rounded-xl p-6 shadow-md">
-                    <h3 className="text-lg font-serif font-bold text-foreground mb-4">Destinations</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {destinations.map((destination) => (
-                        <button
-                          key={destination}
-                          onClick={() =>
-                            setSelectedDestination(selectedDestination === destination ? null : destination || null)
-                          }
-                          className={`px-3 py-1 rounded-full text-sm transition-colors ${
-                            selectedDestination === destination
-                              ? "bg-mountain-blue text-white"
-                              : "bg-muted text-muted-foreground hover:bg-muted/80"
-                          }`}
-                        >
-                          {destination}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                  )}
                 </div>
               </aside>
             </div>
           </div>
         </section>
-
-
       </main>
       <Footer />
     </>

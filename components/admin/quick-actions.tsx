@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { Plus, Package, FileText, ImageIcon, Settings, Car, Route, BookOpen } from "lucide-react"
+import { Plus, Package, FileText, ImageIcon, Settings, Car, Route, BookOpen, MessageSquare } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 const actions = [
@@ -11,6 +11,7 @@ const actions = [
   { id: "diary", href: "/admin/diaries/new", label: "Add Diary", icon: BookOpen, color: "bg-pink-100 text-pink-600" },
   { id: "vehicle", href: "/admin/taxi", label: "Add Vehicle", icon: Car, color: "bg-orange-100 text-orange-600" },
   { id: "route", href: "/admin/taxi", label: "Add Route", icon: Route, color: "bg-cyan-100 text-cyan-600" },
+  { id: "review", href: "/admin/reviews/new", label: "Add Review", icon: MessageSquare, color: "bg-indigo-100 text-indigo-600" },
   { id: "media", href: "/admin/media", label: "Upload Media", icon: ImageIcon, color: "bg-amber-100 text-amber-600" },
   { id: "settings", href: "/admin/settings", label: "Settings", icon: Settings, color: "bg-purple-100 text-purple-600" },
 ]
