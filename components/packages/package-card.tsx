@@ -7,6 +7,7 @@ import { Clock, MapPin, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { cardHover, fadeInUp } from "@/lib/animation-variants"
+import { useSettings } from "@/lib/settings-context"
 import { generateWhatsAppLink } from "@/lib/whatsapp"
 
 interface Package {
@@ -32,7 +33,8 @@ interface PackageCardProps {
 }
 
 export function PackageCard({ pkg }: PackageCardProps) {
-  const whatsappLink = generateWhatsAppLink({ packageName: pkg.title })
+  const { settings } = useSettings()
+  const whatsappLink = generateWhatsAppLink({ packageName: pkg.title }, settings?.whatsapp_number)
 
   // Calculate discount percentage
   const discountPercent =

@@ -22,7 +22,6 @@ interface Vehicle {
   capacity: number
   luggage_capacity?: number
   features?: string[]
-  base_fare?: number
   per_km_rate?: number
   image_url?: string
   is_available: boolean
@@ -41,8 +40,7 @@ export function VehiclesSection({ vehicles }: VehiclesSectionProps) {
     type: "",
     capacity: 4,
     luggage_capacity: 2,
-    base_fare: 0,
-    per_km_rate: 0,
+    features: "",
     image_url: "",
   })
 
@@ -52,8 +50,7 @@ export function VehiclesSection({ vehicles }: VehiclesSectionProps) {
       type: "",
       capacity: 4,
       luggage_capacity: 2,
-      base_fare: 0,
-      per_km_rate: 0,
+      features: "",
       image_url: "",
     })
     setEditingVehicle(null)
@@ -66,8 +63,7 @@ export function VehiclesSection({ vehicles }: VehiclesSectionProps) {
       type: vehicle.type,
       capacity: vehicle.capacity,
       luggage_capacity: vehicle.luggage_capacity || 2,
-      base_fare: vehicle.base_fare || 0,
-      per_km_rate: vehicle.per_km_rate || 0,
+      features: vehicle.features?.join(", ") || "",
       image_url: vehicle.image_url || "",
     })
     setIsOpen(true)
@@ -80,8 +76,10 @@ export function VehiclesSection({ vehicles }: VehiclesSectionProps) {
       ...formData,
       capacity: Number(formData.capacity),
       luggage_capacity: Number(formData.luggage_capacity),
-      base_fare: Number(formData.base_fare),
-      per_km_rate: Number(formData.per_km_rate),
+      features: formData.features
+        .split(",")
+        .map((f: string) => f.trim())
+        .filter((f: string) => f.length > 0),
     }
 
     let error
@@ -202,31 +200,18 @@ export function VehiclesSection({ vehicles }: VehiclesSectionProps) {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="base_fare" className="text-xs sm:text-sm">Base Fare (₹)</Label>
-                  <Input
-                    id="base_fare"
-                    type="number"
-                    min="0"
-                    className="text-base sm:text-sm"
-                    value={formData.base_fare}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, base_fare: Number(e.target.value) }))}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="per_km" className="text-xs sm:text-sm">Per KM Rate (₹)</Label>
-                  <Input
-                    id="per_km"
-                    type="number"
-                    min="0"
-                    className="text-base sm:text-sm"
-                    value={formData.per_km_rate}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, per_km_rate: Number(e.target.value) }))}
-                  />
-                </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="features" className="text-xs sm:text-sm">Features (comma separated)</Label>
+                <Input
+                  id="features"
+                  className="text-base sm:text-sm"
+                  value={formData.features}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, features: e.target.value }))}
+                  placeholder="e.g., AC, Music System, Sunroof, WiFi"
+                />
               </div>
-              
+
               <div className="space-y-2">
                 <Label className="text-xs sm:text-sm">Vehicle Image</Label>
                 {formData.image_url ? (
@@ -317,9 +302,20 @@ export function VehiclesSection({ vehicles }: VehiclesSectionProps) {
                   <p>
                     {vehicle.capacity} passengers • {vehicle.luggage_capacity || 0} bags
                   </p>
-                  <p>
-                    ₹{vehicle.base_fare} base • ₹{vehicle.per_km_rate}/km
-                  </p>
+                  {vehicle.features && vehicle.features.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {vehicle.features.slice(0, 3).map((feature, i) => (
+                        <Badge key={i} variant="secondary" className="text-[10px] px-1 h-5">
+                          {feature}
+                        </Badge>
+                      ))}
+                      {vehicle.features.length > 3 && (
+                        <span className="text-[10px] text-muted-foreground self-center">
+                          +{vehicle.features.length - 3} more
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
                 <div className="flex gap-2 mt-2 sm:mt-3">
                   <Button variant="ghost" size="sm" onClick={() => openEdit(vehicle)} className="h-8 px-2 sm:h-9 sm:px-3">
@@ -334,6 +330,6 @@ export function VehiclesSection({ vehicles }: VehiclesSectionProps) {
           </div>
         )}
       </CardContent>
-    </Card>
+    </Card >
   )
 }

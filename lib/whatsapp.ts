@@ -4,7 +4,6 @@ interface BookingDetails {
   pickup?: string
   drop?: string
   date?: string
-  time?: string
   passengers?: number
   name?: string
   phone?: string
@@ -13,8 +12,9 @@ interface BookingDetails {
   route?: string
 }
 
-export function generateWhatsAppLink(details: BookingDetails): string {
-  const phoneNumber = "919876543210"
+export function generateWhatsAppLink(details: BookingDetails, whatsappPhone?: string): string {
+  // Remove all non-numeric characters from phone number
+  const phoneNumber = (whatsappPhone || "919876543210").replace(/[^0-9]/g, "")
 
   const messageLines: string[] = []
 
@@ -40,9 +40,6 @@ export function generateWhatsAppLink(details: BookingDetails): string {
   }
   if (details.date) {
     messageLines.push(`Date: ${details.date}`)
-  }
-  if (details.time) {
-    messageLines.push(`Time: ${details.time}`)
   }
   if (details.passengers) {
     messageLines.push(`Passengers: ${details.passengers}`)

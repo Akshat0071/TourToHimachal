@@ -85,29 +85,7 @@ export function BlogSidebar({ blogs = [] }: BlogSidebarProps) {
 
       {/* Newsletter removed as requested */}
 
-      {/* Tag Cloud */}
-      {allTags.length > 0 && (
-        <motion.div
-          variants={fadeInUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="bg-card rounded-xl p-6 shadow-md"
-        >
-          <h3 className="text-lg font-serif font-bold text-foreground mb-4">Tags</h3>
-          <div className="flex flex-wrap gap-2">
-            {allTags.map((tag) => (
-              <Badge
-                key={tag}
-                variant="outline"
-                className="cursor-pointer hover:bg-mountain-blue hover:text-white transition-colors"
-              >
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        </motion.div>
-      )}
+      {/* Tag Cloud removed as requested */}
     </aside>
   )
 }

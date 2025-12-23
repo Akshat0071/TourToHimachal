@@ -10,6 +10,7 @@ interface ItineraryDay {
   title: string
   description: string
   activities: string[]
+  subtitles?: Array<{ title: string; highlight?: string; description: string; activities: string[] }>
 }
 
 interface ItineraryAccordionProps {
@@ -58,20 +59,39 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
                 className="overflow-hidden"
               >
                 <div className="px-4 md:px-5 pb-5 pt-0">
-                  <div className="pl-16">
-                    <p className="text-muted-foreground mb-4">{item.description}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {item.activities.map((activity, index) => (
-                        <span
-                          key={index}
-                          className="inline-flex items-center gap-1 px-3 py-1 bg-muted rounded-full text-sm text-muted-foreground"
-                        >
-                          <MapPin className="h-3 w-3" />
-                          {activity}
-                        </span>
+                  {/* Subtitles Section */}
+                  {item.subtitles && item.subtitles.length > 0 ? (
+                    <div className="space-y-3 pl-16">
+                      {item.subtitles.map((subtitle, subtitleIndex) => (
+                        <div key={subtitleIndex} className="bg-muted/30 rounded-lg p-3">
+                          <h5 className="font-semibold text-foreground text-sm mb-2">{subtitle.title}</h5>
+                          {subtitle.highlight && (
+                            <div className="mb-3 p-2 rounded-lg bg-gradient-to-r from-yellow-50 to-yellow-100 border border-yellow-300 shadow-lg shadow-yellow-200/50">
+                              <p className="text-sm font-medium text-yellow-900">{subtitle.highlight}</p>
+                            </div>
+                          )}
+                          <div className="text-sm text-muted-foreground mb-2 whitespace-pre-line">
+                            {subtitle.description}
+                          </div>
+                          {subtitle.activities && subtitle.activities.length > 0 && (
+                            <div className="flex flex-wrap gap-2">
+                              {subtitle.activities.map((activity, actIndex) => (
+                                <span
+                                  key={actIndex}
+                                  className="inline-flex items-center gap-1 px-2 py-1 bg-background rounded text-xs text-muted-foreground"
+                                >
+                                  <MapPin className="h-3 w-3" />
+                                  {activity}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       ))}
                     </div>
-                  </div>
+                  ) : (
+                    <div className="pl-16 text-muted-foreground text-sm italic">No sub-sections added.</div>
+                  )}
                 </div>
               </motion.div>
             )}

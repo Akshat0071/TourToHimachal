@@ -32,10 +32,10 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
   const dateString = post.published_at || post.date
   const formattedDate = dateString
     ? new Date(dateString).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      })
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    })
     : ""
 
   const imageUrl =
@@ -107,7 +107,7 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
           initial="rest"
           whileHover="hover"
         >
-          <div className="relative aspect-[16/10]">
+          <div className="relative aspect-[2/1] sm:aspect-[16/10]">
             <Image
               src={imageUrl || "/placeholder.svg"}
               alt={post.title}
@@ -115,34 +115,34 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
             {post.category && (
-              <div className="absolute top-3 left-3">
-                <Badge variant="secondary" className="bg-white/95 text-mountain-blue font-semibold text-xs">
+              <div className="absolute top-2 left-2 md:top-3 md:left-3">
+                <Badge variant="secondary" className="bg-white/95 text-mountain-blue font-semibold text-[10px] md:text-xs px-1.5 py-0.5 md:px-2.5 md:py-0.5">
                   {post.category}
                 </Badge>
               </div>
             )}
           </div>
-          <div className="p-4 md:p-5 flex flex-col flex-1 bg-gradient-to-b from-transparent to-white/50">
-            <h3 className="text-base md:text-lg font-serif font-bold text-foreground mb-2 group-hover:text-mountain-blue transition-colors line-clamp-2">
+          <div className="p-3 md:p-5 flex flex-col flex-1 bg-gradient-to-b from-transparent to-white/50">
+            <h3 className="text-sm sm:text-base md:text-lg font-serif font-bold text-foreground mb-1.5 md:mb-2 group-hover:text-mountain-blue transition-colors line-clamp-2 leading-tight">
               {post.title}
             </h3>
             {post.excerpt && (
-              <p className="text-xs md:text-sm text-muted-foreground mb-3 md:mb-4 line-clamp-2 flex-1">
+              <p className="text-xs md:text-sm text-muted-foreground mb-2 md:mb-4 line-clamp-2 flex-1 leading-relaxed">
                 {post.excerpt}
               </p>
             )}
-            <div className="flex items-center justify-between mt-auto">
-              <div className="flex items-center gap-2 md:gap-3 text-xs text-muted-foreground">
+            <div className="flex items-center justify-between mt-auto pt-2">
+              <div className="flex items-center gap-2 md:gap-3 text-[10px] sm:text-xs text-muted-foreground">
                 {post.readTime && (
-                  <span className="flex items-center gap-1 bg-mountain-blue/10 px-2 py-1 rounded-full">
-                    <Clock className="h-3 w-3" />
+                  <span className="flex items-center gap-1 bg-mountain-blue/10 px-1.5 py-0.5 md:px-2 md:py-1 rounded-full">
+                    <Clock className="h-2.5 w-2.5 md:h-3 md:w-3" />
                     {post.readTime} min
                   </span>
                 )}
                 {formattedDate && <span>{formattedDate}</span>}
               </div>
-              <span className="text-mountain-blue text-xs md:text-sm font-medium flex items-center group-hover:gap-1 transition-all">
-                Read <ArrowRight className="h-3 w-3 md:h-4 md:w-4 ml-1" />
+              <span className="text-mountain-blue text-[10px] sm:text-xs md:text-sm font-medium flex items-center group-hover:gap-1 transition-all">
+                Read <ArrowRight className="h-2.5 w-2.5 md:h-4 md:w-4 ml-1" />
               </span>
             </div>
           </div>

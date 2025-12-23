@@ -35,11 +35,21 @@ export function LeadsFilters({ currentStatus = "all", currentType = "all" }: Lea
       <div className="flex items-center gap-2">
         <Filter className="w-5 h-5 text-muted-foreground shrink-0" />
         <span className="text-xs sm:text-sm font-medium text-foreground">Filters:</span>
+        {/* Mobile: Export button aligned with filter label */}
+        <Button
+          variant="outline"
+          onClick={handleExport}
+          className="gap-2 bg-transparent text-xs sm:text-sm ml-auto whitespace-nowrap sm:hidden"
+        >
+          <Download className="w-4 h-4" />
+          <span>Export CSV</span>
+        </Button>
       </div>
       
-      <div className="flex flex-col xs:flex-row gap-2 items-stretch xs:items-center">
+      {/* Controls row: All Status | All Types | Export CSV on one line with spacing */}
+      <div className="flex flex-row flex-wrap items-center gap-2">
         <Select value={currentStatus} onValueChange={(value) => updateFilter("status", value)}>
-          <SelectTrigger className="w-full xs:w-32 text-xs sm:text-sm">
+          <SelectTrigger className="w-36 text-xs sm:text-sm">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -52,7 +62,7 @@ export function LeadsFilters({ currentStatus = "all", currentType = "all" }: Lea
         </Select>
 
         <Select value={currentType} onValueChange={(value) => updateFilter("type", value)}>
-          <SelectTrigger className="w-full xs:w-32 text-xs sm:text-sm">
+          <SelectTrigger className="w-36 text-xs sm:text-sm">
             <SelectValue placeholder="Type" />
           </SelectTrigger>
           <SelectContent>
@@ -63,9 +73,14 @@ export function LeadsFilters({ currentStatus = "all", currentType = "all" }: Lea
           </SelectContent>
         </Select>
 
-        <Button variant="outline" onClick={handleExport} className="gap-2 bg-transparent w-full xs:w-auto text-xs sm:text-sm">
+        {/* Desktop/Tablet: Export button on controls row, right-aligned */}
+        <Button
+          variant="outline"
+          onClick={handleExport}
+          className="hidden sm:inline-flex gap-2 bg-transparent text-xs sm:text-sm ml-auto whitespace-nowrap"
+        >
           <Download className="w-4 h-4" />
-          <span className="xs:inline">Export CSV</span>
+          <span>Export CSV</span>
         </Button>
       </div>
     </div>

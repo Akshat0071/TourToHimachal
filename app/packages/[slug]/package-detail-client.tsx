@@ -12,6 +12,7 @@ import { PackageHeroSlider } from "@/components/packages/package-hero-slider"
 import { RelatedPackagesCarousel } from "@/components/packages/related-packages-carousel"
 import { ItineraryAccordion } from "@/components/packages/itinerary-accordion"
 import { PackageBookingForm } from "@/components/packages/package-booking-form"
+import { useSettings } from "@/lib/settings-context"
 import { generateWhatsAppLink } from "@/lib/whatsapp"
 import { fadeInUp, slideInLeft, slideInRight } from "@/lib/animation-variants"
 import {
@@ -32,6 +33,8 @@ interface Package {
   price: number
   original_price?: number
   duration: string
+  region?: string
+  min_persons?: number
   highlights?: string[]
   inclusions?: string[]
   exclusions?: string[]
@@ -52,7 +55,8 @@ interface PackageDetailClientProps {
 
 export function PackageDetailClient({ pkg, allPackages }: PackageDetailClientProps) {
   const [isBookingOpen, setIsBookingOpen] = useState(false)
-  const whatsappLink = generateWhatsAppLink({ packageName: pkg.title })
+  const { settings } = useSettings()
+  const whatsappLink = generateWhatsAppLink({ packageName: pkg.title }, settings?.whatsapp_number)
 
   return (
     <main className="min-h-screen bg-background">
@@ -203,11 +207,11 @@ export function PackageDetailClient({ pkg, allPackages }: PackageDetailClientPro
                     </div>
                     <div className="flex items-center gap-3 text-muted-foreground">
                       <MapPin className="h-5 w-5" />
-                      <span>Himachal Pradesh</span>
+                      <span>{pkg.region || "Himachal Pradesh"}</span>
                     </div>
                     <div className="flex items-center gap-3 text-muted-foreground">
                       <Users className="h-5 w-5" />
-                      <span>Min 2 persons</span>
+                      <span>Min {(pkg.min_persons ?? 2)} persons</span>
                     </div>
                   </div>
 
@@ -240,7 +244,7 @@ export function PackageDetailClient({ pkg, allPackages }: PackageDetailClientPro
                       </a>
                     </Button>
                     <Button asChild variant="outline" className="w-full gap-2 bg-transparent" size="lg">
-                      <a href="tel:+919876543210">
+                      <a href={`tel:${(settings?.contact_phone || "+919876543210").replace(/\s/g, "")}`}>
                         <Phone className="h-5 w-5" />
                         Call Now
                       </a>

@@ -11,17 +11,18 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { generateWhatsAppLink } from "@/lib/whatsapp"
+import { useSettings } from "@/lib/settings-context"
 import { vehicles } from "@/data/taxis"
 import { fadeInUp } from "@/lib/animation-variants"
 
 export function TaxiBookingForm() {
+  const { settings } = useSettings()
   const [formData, setFormData] = useState({
     serviceType: "",
     vehicleType: "",
     pickup: "",
     drop: "",
     date: "",
-    time: "",
     passengers: "",
     name: "",
     phone: "",
@@ -71,7 +72,7 @@ export function TaxiBookingForm() {
           phone: formData.phone,
           email: formData.email || "",
           subject: `Taxi Booking: ${formData.pickup} to ${formData.drop}`,
-          message: `Service Type: ${formData.serviceType}\nVehicle: ${formData.vehicleType}\nPickup: ${formData.pickup}\nDrop: ${formData.drop}\nDate: ${formData.date}\nTime: ${formData.time || "Not specified"}\nPassengers: ${formData.passengers || "Not specified"}\n\nAdditional Notes: ${formData.message || "None"}`,
+          message: `Service Type: ${formData.serviceType}\nVehicle: ${formData.vehicleType}\nPickup: ${formData.pickup}\nDrop: ${formData.drop}\nDate: ${formData.date}\nPassengers: ${formData.passengers || "Not specified"}\n\nAdditional Notes: ${formData.message || "None"}`,
           serviceType: "taxi",
           honeypot: "",
         }),
@@ -84,18 +85,20 @@ export function TaxiBookingForm() {
         setReferenceNumber(result.referenceNumber)
 
         // Generate WhatsApp link and redirect
-        const whatsappLink = generateWhatsAppLink({
-          serviceType: formData.serviceType,
-          vehicleType: formData.vehicleType,
-          pickup: formData.pickup,
-          drop: formData.drop,
-          date: formData.date,
-          time: formData.time,
-          passengers: Number.parseInt(formData.passengers) || undefined,
-          name: formData.name,
-          phone: formData.phone,
-          message: formData.message,
-        })
+        const whatsappLink = generateWhatsAppLink(
+          {
+            serviceType: formData.serviceType,
+            vehicleType: formData.vehicleType,
+            pickup: formData.pickup,
+            drop: formData.drop,
+            date: formData.date,
+            passengers: Number.parseInt(formData.passengers) || undefined,
+            name: formData.name,
+            phone: formData.phone,
+            message: formData.message,
+          },
+          settings?.whatsapp_number
+        )
 
         setTimeout(() => {
           window.open(whatsappLink, "_blank")
@@ -147,7 +150,6 @@ export function TaxiBookingForm() {
               pickup: "",
               drop: "",
               date: "",
-              time: "",
               passengers: "",
               name: "",
               phone: "",
@@ -173,7 +175,7 @@ export function TaxiBookingForm() {
     >
       <h3 className="text-xl font-semibold text-foreground mb-6">Book Your Ride</h3>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
         {/* Service Type */}
         <div className="space-y-2">
           <Label htmlFor="serviceType">Service Type *</Label>
@@ -214,7 +216,7 @@ export function TaxiBookingForm() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
         {/* Pickup */}
         <div className="space-y-2">
           <Label htmlFor="pickup">Pickup Location *</Label>
@@ -250,7 +252,7 @@ export function TaxiBookingForm() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
         {/* Date */}
         <div className="space-y-2">
           <Label htmlFor="date">Date *</Label>
@@ -268,20 +270,7 @@ export function TaxiBookingForm() {
           {errors.date && <p className="text-sm text-destructive">{errors.date}</p>}
         </div>
 
-        {/* Time */}
-        <div className="space-y-2">
-          <Label htmlFor="time">Time (Optional)</Label>
-          <div className="relative">
-            <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              id="time"
-              type="time"
-              value={formData.time}
-              onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-              className="pl-10"
-            />
-          </div>
-        </div>
+
 
         {/* Passengers */}
         <div className="space-y-2">
@@ -302,7 +291,7 @@ export function TaxiBookingForm() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
         {/* Name */}
         <div className="space-y-2">
           <Label htmlFor="name">Your Name *</Label>

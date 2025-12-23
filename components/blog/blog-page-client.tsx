@@ -38,7 +38,7 @@ export function BlogPageClient({ blogs, categories }: BlogPageClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE)
-  
+
   const handleCategoryClick = (category: string | null) => {
     setSelectedCategory((prev) => {
       // Toggle off if clicking the same category again
@@ -100,34 +100,33 @@ export function BlogPageClient({ blogs, categories }: BlogPageClientProps) {
         {/* Featured section removed as requested */}
 
         {/* Main Content */}
-        <section className="relative z-10 py-10 md:py-16 bg-linear-to-b from-background via-[oklch(0.97_0.02_85)] to-background">
+        <section className="relative z-10 py-6 md:py-16 bg-linear-to-b from-background via-[oklch(0.97_0.02_85)] to-background">
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
               {/* Main Column */}
               <div className="lg:col-span-2">
                 {/* Search */}
-                <div className="mb-6 md:mb-8">
+                <div className="mb-4 md:mb-8">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-mountain-blue" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 md:h-4 md:w-4 text-mountain-blue" />
                     <Input
                       type="text"
                       placeholder="Search articles..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 rounded-full border-2 border-mountain-blue/20 focus:border-mountain-blue h-11 md:h-12"
+                      className="pl-9 md:pl-10 rounded-full border-2 border-mountain-blue/20 focus:border-mountain-blue h-10 md:h-12 text-sm md:text-base"
                     />
                   </div>
                 </div>
 
                 {/* Category Filter - Horizontal scroll on mobile */}
-                <div className="flex gap-2 mb-6 md:mb-8 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
+                <div className="flex gap-2 mb-4 md:mb-8 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sticky top-14 z-20 bg-background/80 backdrop-blur-sm py-2 md:static md:bg-transparent md:p-0">
                   <Badge
                     variant={selectedCategory === null ? "default" : "outline"}
-                    className={`cursor-pointer shrink-0 rounded-full px-4 py-2 text-sm ${
-                      selectedCategory === null
-                        ? "bg-linear-to-r from-mountain-blue to-forest-green text-white"
+                    className={`cursor-pointer shrink-0 rounded-full px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm transition-all ${selectedCategory === null
+                        ? "bg-linear-to-r from-mountain-blue to-forest-green text-white shadow-md"
                         : "border-2 hover:bg-mountain-blue/10"
-                    }`}
+                      }`}
                     onClick={() => handleCategoryClick(null)}
                   >
                     All
@@ -136,11 +135,10 @@ export function BlogPageClient({ blogs, categories }: BlogPageClientProps) {
                     <Badge
                       key={category}
                       variant={selectedCategory === category ? "default" : "outline"}
-                      className={`cursor-pointer shrink-0 rounded-full px-4 py-2 text-sm ${
-                        selectedCategory === category
-                          ? "bg-linear-to-r from-mountain-blue to-forest-green text-white"
+                      className={`cursor-pointer shrink-0 rounded-full px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm transition-all ${selectedCategory === category
+                          ? "bg-linear-to-r from-mountain-blue to-forest-green text-white shadow-md"
                           : "border-2 hover:bg-mountain-blue/10"
-                      }`}
+                        }`}
                       onClick={() => handleCategoryClick(category)}
                     >
                       {category}

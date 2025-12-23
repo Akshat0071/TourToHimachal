@@ -77,7 +77,7 @@ export function Header() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-white/95 backdrop-blur-md shadow-sm border-b border-border"
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-background/95 backdrop-blur-md shadow-sm border-b border-border"
     >
       <div className="container mx-auto px-4">
         <div className="flex h-16 md:h-20 items-center justify-between">
@@ -96,7 +96,19 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="hidden lg:block">
+          <div className="hidden lg:flex items-center gap-4">
+            {/* Contact Phone */}
+            <div className="text-right">
+              <p className="text-xs text-muted-foreground">Need help?</p>
+              <a
+                href={`tel:${contactPhone.replace(/\s/g, "")}`}
+                className="text-sm font-semibold text-foreground hover:text-saffron transition-colors flex items-center justify-end gap-1"
+              >
+                <Phone className="h-4 w-4" />
+                {contactPhone}
+              </a>
+            </div>
+            
             <Button asChild variant="gradient" size="lg" className="gap-2">
               <a
                 href={`https://wa.me/${whatsappNumber.replace(/[^0-9]/g, "")}`}

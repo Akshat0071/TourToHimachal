@@ -24,7 +24,7 @@ export function PackageHeroSlider({ images, title, pdfUrl }: PackageHeroSliderPr
 
     const id = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % displayImages.length)
-    }, 1500)
+      }, 3000)
 
     return () => clearInterval(id)
   }, [displayImages.length])

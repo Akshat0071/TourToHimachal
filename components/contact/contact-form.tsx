@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { fadeInUp } from "@/lib/animation-variants"
+import { useSettings } from "@/lib/settings-context"
 import { submitContactForm, type ContactFormData } from "@/lib/contact"
 
 const serviceTypes = [
@@ -28,6 +29,7 @@ interface FormErrors {
 }
 
 export function ContactForm() {
+  const { settings } = useSettings()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [referenceNumber, setReferenceNumber] = useState<string | null>(null)
@@ -192,7 +194,7 @@ export function ContactForm() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button asChild className="bg-[#25D366] hover:bg-[#25D366]/90 text-white">
             <a
-              href="https://wa.me/919876543210?text=Hi!%20I%20just%20submitted%20an%20inquiry%20and%20would%20like%20to%20chat."
+              href={`https://wa.me/${(settings?.whatsapp_number || "919876543210").replace(/[^0-9]/g, "")}?text=Hi!%20I%20just%20submitted%20an%20inquiry%20and%20would%20like%20to%20chat.`}
               target="_blank"
               rel="noopener noreferrer"
             >

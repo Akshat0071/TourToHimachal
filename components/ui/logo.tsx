@@ -9,7 +9,7 @@ interface LogoProps {
   size?: "sm" | "md" | "lg"
   variant?: "full" | "icon"
   isScrolled?: boolean
-  href?: string
+  href?: string | null
   onClick?: () => void
   forceColors?: boolean
 }
@@ -44,7 +44,7 @@ export function Logo({
           src="/Images/logo.webp"
           alt="TourToHimachal Logo"
           fill
-          className="object-contain object-left"
+          className="object-contain object-center"
           priority
         />
       </div>

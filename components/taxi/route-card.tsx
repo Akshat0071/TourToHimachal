@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { MapPin, Clock, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useSettings } from "@/lib/settings-context"
 import { fadeInUp } from "@/lib/animation-variants"
 import { generateWhatsAppLink } from "@/lib/whatsapp"
 
@@ -21,9 +22,13 @@ interface RouteCardProps {
 }
 
 export function RouteCard({ route }: RouteCardProps) {
-  const whatsappLink = generateWhatsAppLink({
-    route: `${route.from_location} to ${route.to_location}`,
-  })
+  const { settings } = useSettings()
+  const whatsappLink = generateWhatsAppLink(
+    {
+      route: `${route.from_location} to ${route.to_location}`,
+    },
+    settings?.whatsapp_number
+  )
 
   return (
     <motion.div

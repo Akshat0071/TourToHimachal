@@ -7,7 +7,7 @@ export default async function TaxiPage() {
   const supabase = createPublicClient()
 
   const [vehiclesResult, routesResult] = await Promise.all([
-    supabase.from("vehicles").select("*").eq("is_available", true).order("base_fare", { ascending: true }),
+    supabase.from("vehicles").select("*").eq("is_available", true).order("capacity", { ascending: true }),
     supabase.from("taxi_routes").select("*").eq("is_active", true).order("base_fare", { ascending: true }),
   ])
 

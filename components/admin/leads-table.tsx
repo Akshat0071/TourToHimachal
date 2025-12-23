@@ -101,12 +101,12 @@ export function LeadsTable({ leads }: LeadsTableProps) {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="text-xs sm:text-sm">Reference ID</TableHead>
               <TableHead className="text-xs sm:text-sm">Customer</TableHead>
               <TableHead className="text-xs sm:text-sm">Contact</TableHead>
-              <TableHead className="text-xs sm:text-sm">Type</TableHead>
-              <TableHead className="text-xs sm:text-sm">Status</TableHead>
-              <TableHead className="text-xs sm:text-sm">Date</TableHead>
-              <TableHead className="hidden md:table-head text-xs sm:text-sm">Reference</TableHead>
+              <TableHead className="text-center text-xs sm:text-sm">Type</TableHead>
+              <TableHead className="text-center text-xs sm:text-sm">Status</TableHead>
+              <TableHead className="text-center text-xs sm:text-sm whitespace-nowrap">Date</TableHead>
               <TableHead className="text-right text-xs sm:text-sm">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -119,6 +119,9 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                 transition={{ delay: index * 0.03 }}
                 className="border-b border-border hover:bg-muted/50 transition-colors"
               >
+                <TableCell className="text-[10px] sm:text-xs">
+                  <code className="bg-muted px-1 sm:px-2 py-0.5 sm:py-1 rounded">{lead.reference_number}</code>
+                </TableCell>
                 <TableCell className="text-xs sm:text-sm">
                   <div>
                     <p className="font-medium text-foreground truncate">{lead.name}</p>
@@ -152,16 +155,16 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                     </a>
                   </div>
                 </TableCell>
-                <TableCell className="text-xs sm:text-sm">
+                <TableCell className="text-center text-xs sm:text-sm">
                   <Badge variant="outline" className="text-[10px] sm:text-xs">{serviceLabels[lead.service_type] || lead.service_type}</Badge>
                 </TableCell>
-                <TableCell className="text-xs sm:text-sm">
+                <TableCell className="text-center text-xs sm:text-sm">
                   <Select
                     value={lead.status}
                     onValueChange={(value) => updateLeadStatus(lead.id, value)}
                     disabled={isUpdating}
                   >
-                    <SelectTrigger className={`w-24 sm:w-28 h-7 sm:h-8 text-[10px] sm:text-xs ${statusColors[lead.status]}`}>
+                    <SelectTrigger className={`mx-auto w-24 sm:w-28 h-7 sm:h-8 text-[10px] sm:text-xs ${statusColors[lead.status]}`}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -172,11 +175,8 @@ export function LeadsTable({ leads }: LeadsTableProps) {
                     </SelectContent>
                   </Select>
                 </TableCell>
-                <TableCell className="text-[10px] sm:text-sm text-muted-foreground whitespace-nowrap">
+                <TableCell className="text-center text-[10px] sm:text-sm text-muted-foreground whitespace-nowrap">
                   {format(new Date(lead.created_at), "MMM d")}
-                </TableCell>
-                <TableCell className="hidden md:table-cell text-[10px] sm:text-xs">
-                  <code className="bg-muted px-1 sm:px-2 py-0.5 sm:py-1 rounded">{lead.reference_number}</code>
                 </TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>

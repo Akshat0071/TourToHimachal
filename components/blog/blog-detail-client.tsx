@@ -7,6 +7,7 @@ import { ArrowLeft, Share2, Calendar, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { MarkdownRenderer } from "@/lib/markdown-renderer"
+import { useSettings } from "@/lib/settings-context"
 import { generateWhatsAppLink } from "@/lib/whatsapp"
 
 interface BlogPost {
@@ -30,9 +31,13 @@ interface BlogDetailClientProps {
 }
 
 export function BlogDetailClient({ post, relatedPosts }: BlogDetailClientProps) {
-  const whatsappLink = generateWhatsAppLink({
-    message: `Check out this article: ${post.title} - ${post.excerpt}`,
-  })
+  const { settings } = useSettings()
+  const whatsappLink = generateWhatsAppLink(
+    {
+      message: `Check out this article: ${post.title} - ${post.excerpt}`,
+    },
+    settings?.whatsapp_number
+  )
 
   const publishedDate = new Date(post.published_at || post.created_at)
   const isValidDate = !isNaN(publishedDate.getTime())

@@ -14,6 +14,7 @@ import { TaxiBookingForm } from "@/components/taxi/taxi-booking-form"
 import { SafetyFeatures } from "@/components/taxi/safety-features"
 import { TaxiTestimonials } from "@/components/taxi/taxi-testimonials"
 import { PackageFAQ } from "@/components/packages/package-faq"
+import { useSettings } from "@/lib/settings-context"
 import { fadeInUp, staggerContainer, slideInLeft, slideInRight } from "@/lib/animation-variants"
 
 interface Vehicle {
@@ -67,6 +68,7 @@ const taxiFaqs = [
 
 export function TaxiPageClient({ vehicles, routes }: TaxiPageClientProps) {
   const [selectedVehicle, setSelectedVehicle] = useState<string>("")
+  const { settings } = useSettings()
 
   return (
     <main className="min-h-screen bg-background">
@@ -86,13 +88,13 @@ export function TaxiPageClient({ vehicles, routes }: TaxiPageClientProps) {
       >
         <div className="flex flex-wrap gap-4 justify-center">
           <Button asChild size="lg" className="bg-saffron hover:bg-saffron/90 text-white gap-2">
-            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer">
+            <a href={`https://wa.me/${(settings?.whatsapp_number || "919876543210").replace(/[^0-9]/g, "")}`} target="_blank" rel="noopener noreferrer">
               <MessageCircle className="h-5 w-5" />
               WhatsApp Us
             </a>
           </Button>
           <Button asChild size="lg" variant="secondary" className="gap-2">
-            <a href="tel:+919876543210">
+            <a href={`tel:${settings?.contact_phone || "+919876543210"}`}>
               <Phone className="h-5 w-5" />
               Call Now
             </a>
@@ -354,7 +356,7 @@ export function TaxiPageClient({ vehicles, routes }: TaxiPageClientProps) {
             </a>
           </Button>
           <Button asChild variant="outline" size="icon">
-            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer">
+            <a href={`https://wa.me/${(settings?.whatsapp_number || "919876543210").replace(/[^0-9]/g, "")}`} target="_blank" rel="noopener noreferrer">
               <MessageCircle className="h-5 w-5" />
             </a>
           </Button>

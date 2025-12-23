@@ -42,7 +42,7 @@ export function Hero({ images }: HeroProps) {
 
   useAnimationFrame((time, delta) => {
     if (!containerRef.current) return
-    const speed = 0.03
+    const speed = 0.06
     xRef.current -= delta * speed
     const totalWidth = heroImages.length * 400
     if (Math.abs(xRef.current) >= totalWidth) {

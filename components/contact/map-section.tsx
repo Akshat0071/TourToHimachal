@@ -3,9 +3,11 @@
 import { motion } from "framer-motion"
 import { MapPin, Navigation, Phone, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useSettings } from "@/lib/settings-context"
 import { fadeInUp } from "@/lib/animation-variants"
 
 export function MapSection() {
+  const { settings } = useSettings()
   return (
     <section className="py-12 sm:py-16 md:py-24">
       <div className="container mx-auto px-4">
@@ -66,8 +68,8 @@ export function MapSection() {
                 </div>
                 <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground bg-muted/50 p-2 rounded-lg">
                   <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-mountain-blue shrink-0" />
-                  <a href="tel:+919876543210" className="hover:text-primary truncate">
-                    98765 43210
+                  <a href={`tel:${(settings?.contact_phone || "+919876543210").replace(/\s/g, "")}`} className="hover:text-primary truncate">
+                    {(settings?.contact_phone || "+919876543210").replace(/\D/g, "").slice(-10)}
                   </a>
                 </div>
               </div>

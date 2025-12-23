@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Poppins, Playfair_Display } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { SettingsProvider } from "@/lib/settings-context"
+import { ScrollToTop } from "@/components/ui/scroll-to-top"
 import "./globals.css"
 
 const poppins = Poppins({
@@ -41,6 +42,7 @@ export default function RootLayout({
       <body className={`${poppins.variable} ${playfair.variable} font-sans antialiased`}>
         <SettingsProvider>{children}</SettingsProvider>
         <Analytics />
+        <ScrollToTop />
       </body>
     </html>
   )

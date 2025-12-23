@@ -97,9 +97,9 @@ export function PackagesTable({ packages }: PackagesTableProps) {
             <TableHead className="text-xs sm:text-sm">Package</TableHead>
             <TableHead className="text-xs sm:text-sm">Price</TableHead>
             <TableHead className="text-xs sm:text-sm">Duration</TableHead>
-            <TableHead className="hidden sm:table-head text-xs sm:text-sm">Category</TableHead>
-            <TableHead className="text-xs sm:text-sm">Active</TableHead>
-            <TableHead className="hidden md:table-head text-xs sm:text-sm">Featured</TableHead>
+            <TableHead className="text-xs sm:text-sm">Categories</TableHead>
+            <TableHead className="text-center text-xs sm:text-sm">Active</TableHead>
+            <TableHead className="text-center text-xs sm:text-sm">Featured</TableHead>
             <TableHead className="text-right text-xs sm:text-sm">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -127,13 +127,13 @@ export function PackagesTable({ packages }: PackagesTableProps) {
                 </div>
               </TableCell>
               <TableCell className="text-xs sm:text-sm whitespace-nowrap">{pkg.duration}</TableCell>
-              <TableCell className="hidden sm:table-cell text-xs sm:text-sm">
+              <TableCell className="text-xs sm:text-sm">
                 <Badge variant="outline" className="text-[10px] sm:text-xs">{pkg.category || "General"}</Badge>
               </TableCell>
-              <TableCell>
+              <TableCell className="text-center">
                 <Switch checked={pkg.is_active} onCheckedChange={() => toggleActive(pkg.id, pkg.is_active)} />
               </TableCell>
-              <TableCell className="hidden md:table-cell">
+              <TableCell className="text-center">
                 <Switch checked={pkg.is_featured} onCheckedChange={() => toggleFeatured(pkg.id, pkg.is_featured)} />
               </TableCell>
               <TableCell className="text-right">

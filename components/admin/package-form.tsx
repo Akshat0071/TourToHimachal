@@ -25,6 +25,8 @@ interface PackageFormProps {
     price: number
     original_price?: number
     duration: string
+    region?: string
+    min_persons?: number
     highlights?: string[]
     inclusions?: string[]
     exclusions?: string[]
@@ -59,6 +61,8 @@ export function PackageForm({ initialData }: PackageFormProps) {
     price: initialData?.price || 0,
     original_price: initialData?.original_price || 0,
     duration: initialData?.duration || "",
+    region: initialData?.region || "",
+    min_persons: initialData?.min_persons || 2,
     category: initialData?.category || "",
     is_active: initialData?.is_active ?? true,
     is_featured: initialData?.is_featured ?? false,
@@ -72,7 +76,13 @@ export function PackageForm({ initialData }: PackageFormProps) {
   const [exclusionsText, setExclusionsText] = useState(initialData?.exclusions?.join("\n") || "")
 
   const [images, setImages] = useState<string[]>(initialData?.images || [])
-  const [itinerary, setItinerary] = useState<Array<{ day: number, title: string, description: string, activities: string[] }>>([])
+  const [itinerary, setItinerary] = useState<Array<{
+    day: number
+    title: string
+    description: string
+    activities: string[]
+    subtitles?: Array<{ title: string; highlight?: string; description: string; activities: string[] }>
+  }>>([])
 
   useEffect(() => {
     setIsClient(true)
@@ -112,7 +122,8 @@ export function PackageForm({ initialData }: PackageFormProps) {
       day: itinerary.length + 1,
       title: "",
       description: "",
-      activities: []
+      activities: [],
+      subtitles: []
     }
     setItinerary([...itinerary, newDay])
   }
@@ -121,6 +132,53 @@ export function PackageForm({ initialData }: PackageFormProps) {
     const updated = [...itinerary]
     updated[index] = { ...updated[index], [field]: value }
     setItinerary(updated)
+  }
+
+  const addSubtitle = (dayIndex: number) => {
+    const updated = [...itinerary]
+    if (!updated[dayIndex].subtitles) {
+      updated[dayIndex].subtitles = []
+    }
+    updated[dayIndex].subtitles!.push({
+      title: "",
+      highlight: "",
+      description: "",
+      activities: []
+    })
+    setItinerary(updated)
+  }
+
+  const updateSubtitle = (dayIndex: number, subtitleIndex: number, field: 'title' | 'highlight' | 'description', value: string) => {
+    const updated = [...itinerary]
+    if (updated[dayIndex].subtitles) {
+      updated[dayIndex].subtitles![subtitleIndex][field] = value
+      setItinerary(updated)
+    }
+  }
+
+  const removeSubtitle = (dayIndex: number, subtitleIndex: number) => {
+    const updated = [...itinerary]
+    if (updated[dayIndex].subtitles) {
+      updated[dayIndex].subtitles = updated[dayIndex].subtitles!.filter((_, i) => i !== subtitleIndex)
+      setItinerary(updated)
+    }
+  }
+
+  const addSubtitleActivity = (dayIndex: number, subtitleIndex: number, activity: string) => {
+    if (!activity.trim()) return
+    const updated = [...itinerary]
+    if (updated[dayIndex].subtitles) {
+      updated[dayIndex].subtitles![subtitleIndex].activities.push(activity.trim())
+      setItinerary(updated)
+    }
+  }
+
+  const removeSubtitleActivity = (dayIndex: number, subtitleIndex: number, activityIndex: number) => {
+    const updated = [...itinerary]
+    if (updated[dayIndex].subtitles) {
+      updated[dayIndex].subtitles![subtitleIndex].activities = updated[dayIndex].subtitles![subtitleIndex].activities.filter((_, i) => i !== activityIndex)
+      setItinerary(updated)
+    }
   }
 
   const removeItineraryDay = (index: number) => {
@@ -171,6 +229,8 @@ export function PackageForm({ initialData }: PackageFormProps) {
         itinerary: itinerary.length > 0 ? itinerary : null,
         price: Number(formData.price),
         original_price: formData.original_price ? Number(formData.original_price) : null,
+        region: formData.region?.trim() ? formData.region.trim() : null,
+        min_persons: formData.min_persons ? Number(formData.min_persons) : null,
       }
 
       let error
@@ -297,6 +357,31 @@ export function PackageForm({ initialData }: PackageFormProps) {
                 placeholder="e.g., 5 Days / 4 Nights"
                 className="text-base sm:text-sm"
                 required
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="region" className="text-xs sm:text-sm">Region</Label>
+              <Input
+                id="region"
+                value={formData.region}
+                onChange={(e) => setFormData((prev) => ({ ...prev, region: e.target.value }))}
+                placeholder="e.g., Himachal Pradesh"
+                className="text-base sm:text-sm"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="min_persons" className="text-xs sm:text-sm">Minimum Persons</Label>
+              <Input
+                id="min_persons"
+                type="number"
+                min="1"
+                value={formData.min_persons}
+                onChange={(e) => setFormData((prev) => ({ ...prev, min_persons: Number(e.target.value) || 1 }))}
+                placeholder="2"
+                className="text-base sm:text-sm"
               />
             </div>
           </div>
@@ -465,60 +550,121 @@ export function PackageForm({ initialData }: PackageFormProps) {
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor={`day-${dayIndex}-desc`}>Description *</Label>
-                    <Textarea
-                      id={`day-${dayIndex}-desc`}
-                      value={day.description}
-                      onChange={(e) => updateItineraryDay(dayIndex, 'description', e.target.value)}
-                      placeholder="Describe the activities and highlights of this day..."
-                      rows={3}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Activities/Places</Label>
-                    <div className="flex gap-2">
-                      <Input
-                        placeholder="Add activity or place"
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            e.preventDefault()
-                            const target = e.target as HTMLInputElement
-                            addActivity(dayIndex, target.value)
-                            target.value = ""
-                          }
-                        }}
-                      />
+                  {/* Subtitles Section */}
+                  <div className="mt-4 pt-4 border-t border-border space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-base font-semibold">Sub-sections</Label>
                       <Button
                         type="button"
                         variant="outline"
-                        onClick={(e) => {
-                          const input = e.currentTarget.previousElementSibling as HTMLInputElement
-                          addActivity(dayIndex, input.value)
-                          input.value = ""
-                        }}
+                        size="sm"
+                        onClick={() => addSubtitle(dayIndex)}
                       >
-                        <Plus className="w-4 h-4" />
+                        <Plus className="w-4 h-4 mr-1" />
+                        Add Sub-section
                       </Button>
                     </div>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {day.activities.map((activity, actIndex) => (
-                        <span
-                          key={actIndex}
-                          className="inline-flex items-center gap-1 bg-background text-foreground px-3 py-1 rounded-full text-sm border"
-                        >
-                          {activity}
-                          <button
-                            type="button"
-                            onClick={() => removeActivity(dayIndex, actIndex)}
-                            className="hover:text-red-500"
-                          >
-                            <X className="w-3 h-3" />
-                          </button>
-                        </span>
-                      ))}
-                    </div>
+
+                    {day.subtitles && day.subtitles.length > 0 ? (
+                      <div className="space-y-3">
+                        {day.subtitles.map((subtitle, subtitleIndex) => (
+                          <Card key={subtitleIndex} className="bg-background border">
+                            <CardContent className="pt-4 space-y-3">
+                              <div className="flex items-center justify-between">
+                                <p className="text-sm font-medium">Sub-section {subtitleIndex + 1}</p>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => removeSubtitle(dayIndex, subtitleIndex)}
+                                  className="text-destructive hover:text-destructive"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label htmlFor={`sub-${dayIndex}-${subtitleIndex}-title`}>Sub-section Title *</Label>
+                                <Input
+                                  id={`sub-${dayIndex}-${subtitleIndex}-title`}
+                                  value={subtitle.title}
+                                  onChange={(e) => updateSubtitle(dayIndex, subtitleIndex, 'title', e.target.value)}
+                                  placeholder="e.g., Morning Trek to Hadimba Temple"
+                                />
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label htmlFor={`sub-${dayIndex}-${subtitleIndex}-highlight`}>Highlight / Caution (Optional)</Label>
+                                <Input
+                                  id={`sub-${dayIndex}-${subtitleIndex}-highlight`}
+                                  value={subtitle.highlight || ""}
+                                  onChange={(e) => updateSubtitle(dayIndex, subtitleIndex, 'highlight', e.target.value)}
+                                  placeholder="e.g., Bring sun protection, altitude may affect some travelers"
+                                />
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label htmlFor={`sub-${dayIndex}-${subtitleIndex}-desc`}>Description *</Label>
+                                <Textarea
+                                  id={`sub-${dayIndex}-${subtitleIndex}-desc`}
+                                  value={subtitle.description}
+                                  onChange={(e) => updateSubtitle(dayIndex, subtitleIndex, 'description', e.target.value)}
+                                  placeholder="Enter each point on a new line..."
+                                  rows={3}
+                                />
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label>Activities/Places</Label>
+                                <div className="flex gap-2">
+                                  <Input
+                                    placeholder="Add activity or place"
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter") {
+                                        e.preventDefault()
+                                        const target = e.target as HTMLInputElement
+                                        addSubtitleActivity(dayIndex, subtitleIndex, target.value)
+                                        target.value = ""
+                                      }
+                                    }}
+                                  />
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={(e) => {
+                                      const input = e.currentTarget.previousElementSibling as HTMLInputElement
+                                      addSubtitleActivity(dayIndex, subtitleIndex, input.value)
+                                      input.value = ""
+                                    }}
+                                  >
+                                    <Plus className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                  {subtitle.activities.map((activity, actIndex) => (
+                                    <span
+                                      key={actIndex}
+                                      className="inline-flex items-center gap-1 bg-background text-foreground px-3 py-1 rounded-full text-sm border"
+                                    >
+                                      {activity}
+                                      <button
+                                        type="button"
+                                        onClick={() => removeSubtitleActivity(dayIndex, subtitleIndex, actIndex)}
+                                        className="hover:text-red-500"
+                                      >
+                                        <X className="w-3 h-3" />
+                                      </button>
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-muted-foreground italic">No sub-sections added yet. Click "Add Sub-section" to add one.</p>
+                    )}
                   </div>
                 </CardContent>
               </Card>

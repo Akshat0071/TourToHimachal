@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { useSettings } from "@/lib/settings-context"
 import { Car, MapPin, Shield, Clock, CheckCircle2, ArrowRight } from "lucide-react"
 import { slideInLeft, slideInRight } from "@/lib/animation-variants"
 
@@ -15,23 +16,25 @@ function getImageUrl(url: string): string {
   return normalized
 }
 
-const routes = [
-  "Chandigarh to Manali",
-  "Delhi to Shimla",
-  "Airport Pickups",
-  "Local Sightseeing",
-  "Dharamshala Tours",
-  "Inter-state Transfers",
-]
-
-const features = [
-  { icon: Car, text: "AC & Non-AC Vehicles", color: "from-mountain-blue to-forest-green" },
-  { icon: MapPin, text: "Flexible Routes", color: "from-saffron to-sunset-orange" },
-  { icon: Shield, text: "Verified Drivers", color: "from-forest-green to-golden-yellow" },
-  { icon: Clock, text: "24/7 Availability", color: "from-sunset-orange to-temple-red" },
-]
-
 export function TaxiService() {
+  const { settings } = useSettings()
+
+  const routes = [
+    "Chandigarh to Manali",
+    "Delhi to Shimla",
+    "Airport Pickups",
+    "Local Sightseeing",
+    "Dharamshala Tours",
+    "Inter-state Transfers",
+  ]
+
+  const features = [
+    { icon: Car, text: "AC & Non-AC Vehicles", color: "from-mountain-blue to-forest-green" },
+    { icon: MapPin, text: "Flexible Routes", color: "from-saffron to-sunset-orange" },
+    { icon: Shield, text: "Verified Drivers", color: "from-forest-green to-golden-yellow" },
+    { icon: Clock, text: "24/7 Availability", color: "from-sunset-orange to-temple-red" },
+  ]
+
   return (
     <section className="py-8 md:py-12 lg:py-16 bg-linear-to-br from-[oklch(0.97_0.03_145)] via-[oklch(0.98_0.02_160)] to-[oklch(0.96_0.025_180)] relative overflow-hidden">
       {/* Background decorations */}
@@ -166,7 +169,7 @@ export function TaxiService() {
                 asChild
               >
                 <a
-                  href="https://wa.me/919876543210?text=Hi, I want to book a taxi"
+                  href={`https://wa.me/${(settings?.whatsapp_number || "919876543210").replace(/[^0-9]/g, "")}?text=Hi, I want to book a taxi`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

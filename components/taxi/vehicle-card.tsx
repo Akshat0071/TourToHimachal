@@ -12,7 +12,6 @@ interface Vehicle {
   type: string
   capacity: number
   luggage_capacity?: number
-  base_fare: number
   per_km_rate: number
   features?: string[]
   image_url?: string
@@ -31,9 +30,8 @@ export function VehicleCard({ vehicle, isSelected, onSelect }: VehicleCardProps)
       variants={fadeInUp}
       initial="rest"
       whileHover="hover"
-      className={`bg-card rounded-xl overflow-hidden border-2 transition-colors ${
-        isSelected ? "border-primary shadow-lg" : "border-border"
-      }`}
+      className={`bg-card rounded-xl overflow-hidden border-2 transition-colors ${isSelected ? "border-primary shadow-lg" : "border-border"
+        }`}
     >
       <motion.div variants={cardHover}>
         <div className="relative aspect-[16/10] overflow-hidden">
@@ -76,15 +74,7 @@ export function VehicleCard({ vehicle, isSelected, onSelect }: VehicleCardProps)
             </div>
           )}
 
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="text-lg font-bold text-primary">₹{vehicle.per_km_rate}</span>
-              <span className="text-muted-foreground text-sm">/km</span>
-            </div>
-            <Button onClick={onSelect} variant={isSelected ? "default" : "outline"} size="sm">
-              {isSelected ? "Selected" : "Select"}
-            </Button>
-          </div>
+          {/* Rate and Select Button removed */}
         </div>
       </motion.div>
     </motion.div>

@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { setSigningIn } from "@/lib/supabase/client"
+import { Logo } from "@/components/ui/logo"
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("")
@@ -135,23 +136,9 @@ export default function AdminLoginPage() {
         className="w-full max-w-md"
       >
         <Card className="border-0 shadow-xl">
-          <CardHeader className="text-center pb-2">
-            <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-saffron to-sunset-orange rounded-2xl flex items-center justify-center">
-                <svg viewBox="0 0 40 40" fill="none" className="w-8 h-8" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="28" cy="12" r="5" fill="#FFD700" className="opacity-90" />
-                  <path d="M20 8L32 28H8L20 8Z" fill="white" />
-                  <path d="M12 16L22 28H2L12 16Z" fill="white" className="opacity-80" />
-                  <path d="M20 8L24 14H16L20 8Z" fill="#fff" />
-                </svg>
-              </div>
-            </div>
+          <CardHeader className="text-center pb-2 flex flex-col items-center gap-3">
+            <Logo size="lg" href={null} forceColors />
             <CardTitle className="text-2xl font-serif">Admin Login</CardTitle>
-            <CardDescription>
-              <span className="text-saffron">Tour</span>
-              <span>To</span>
-              <span className="text-forest-green">Himachal</span> Dashboard
-            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">

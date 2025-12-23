@@ -21,6 +21,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { safeSignOut } from "@/lib/supabase/client"
+import { Logo } from "@/components/ui/logo"
 
 const navItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -54,23 +55,11 @@ export function AdminSidebar() {
   const SidebarContent = () => (
     <>
       {/* Logo */}
-      <div className="p-6 border-b border-border">
+      <div className="p-2 border-b border-border">
         <Link href="/admin/dashboard" className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-saffron to-sunset-orange rounded-xl flex items-center justify-center">
-            <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="28" cy="12" r="5" fill="#FFD700" className="opacity-90" />
-              <path d="M20 8L32 28H8L20 8Z" fill="white" />
-              <path d="M12 16L22 28H2L12 16Z" fill="white" className="opacity-80" />
-              <path d="M20 8L24 14H16L20 8Z" fill="#fff" />
-            </svg>
-          </div>
-          <div>
-            <h1 className="font-serif font-bold text-foreground">
-              <span className="text-saffron">Tour</span>
-              <span className="text-foreground">To</span>
-              <span className="text-forest-green">Himachal</span>
-            </h1>
-            <p className="text-xs text-muted-foreground">Admin Panel</p>
+          <div className="flex flex-col items-center -mt-1 text-center leading-tight">
+            <Logo size="md" href={null} forceColors />
+            <p className="text-xs text-muted-foreground mt-0.5">Admin Panel</p>
           </div>
         </Link>
       </div>
@@ -118,16 +107,13 @@ export function AdminSidebar() {
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-background border-b border-border px-4 py-3">
         <div className="flex items-center justify-between">
           <Link href="/admin/dashboard" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-saffron to-sunset-orange rounded-lg flex items-center justify-center">
-              <svg viewBox="0 0 40 40" fill="none" className="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="28" cy="12" r="5" fill="#FFD700" />
-                <path d="M20 8L32 28H8L20 8Z" fill="white" />
-                <path d="M12 16L22 28H2L12 16Z" fill="white" className="opacity-80" />
-              </svg>
+            <div className="flex flex-col items-center -mt-0.5 text-center leading-tight">
+              <Logo size="sm" href={null} forceColors />
+              {isMobileOpen && (
+                <span className="text-[10px] text-muted-foreground mt-0.5">Admin Panel</span>
+              )}
             </div>
-            <span className="font-serif font-bold text-sm">
-              <span className="text-saffron">Tour</span>To<span className="text-forest-green">Himachal</span>
-            </span>
+
           </Link>
           <button onClick={() => setIsMobileOpen(!isMobileOpen)} className="p-2">
             {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

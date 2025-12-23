@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { fadeInUp } from "@/lib/animation-variants"
 import { generateWhatsAppLink } from "@/lib/whatsapp"
+import { useSettings } from "@/lib/settings-context"
 
 interface PackageBookingFormProps {
   packageName: string
@@ -19,6 +20,7 @@ interface PackageBookingFormProps {
 }
 
 export function PackageBookingForm({ packageName, packagePrice, onSuccess }: PackageBookingFormProps) {
+  const { settings } = useSettings()
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -77,15 +79,18 @@ export function PackageBookingForm({ packageName, packagePrice, onSuccess }: Pac
         onSuccess?.()
 
         // Generate WhatsApp link and redirect
-        const whatsappLink = generateWhatsAppLink({
-          packageName: packageName,
-          packagePrice: packagePrice,
-          date: formData.date,
-          travelers: Number.parseInt(formData.travelers) || undefined,
-          name: formData.name,
-          phone: formData.phone,
-          message: formData.message,
-        })
+        const whatsappLink = generateWhatsAppLink(
+          {
+            packageName: packageName,
+            packagePrice: packagePrice,
+            date: formData.date,
+            travelers: Number.parseInt(formData.travelers) || undefined,
+            name: formData.name,
+            phone: formData.phone,
+            message: formData.message,
+          },
+          settings?.whatsapp_number
+        )
 
         setTimeout(() => {
           window.open(whatsappLink, "_blank")
