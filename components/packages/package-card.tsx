@@ -50,7 +50,11 @@ export function PackageCard({ pkg }: PackageCardProps) {
       whileHover="hover"
       className="group bg-gradient-to-br from-[oklch(0.99_0.015_85)] to-[oklch(0.97_0.025_70)] rounded-2xl md:rounded-3xl overflow-hidden shadow-md border-2 border-saffron/10 hover:border-saffron/30 hover:shadow-xl transition-all duration-300"
     >
-      <motion.div variants={cardHover}>
+      <Link
+        href={`/packages/${pkg.slug}`}
+        className="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      >
+        <motion.div variants={cardHover} className="h-full flex flex-col">
         {/* Image */}
         <div className="relative aspect-[4/3] overflow-hidden">
           <Image
@@ -116,23 +120,20 @@ export function PackageCard({ pkg }: PackageCardProps) {
             {pkg.short_description || pkg.description}
           </p>
 
-          <div className="flex items-center justify-between gap-3 text-muted-foreground text-xs md:text-sm">
+          <div className="mt-auto flex items-center justify-between gap-3 text-muted-foreground text-xs md:text-sm">
             <div className="flex items-center gap-3">
               <span className="flex items-center gap-1 bg-mountain-blue/10 px-2 py-1 rounded-full">
                 <Clock className="h-3 w-3 md:h-4 md:w-4 text-mountain-blue" />
                 {pkg.duration}
               </span>
             </div>
-            <Button
-              asChild
-              variant="outline"
-              className="bg-gradient-to-r from-forest-green to-mountain-blue hover:from-forest-green/90 hover:to-mountain-blue/90 text-white rounded-full border-2 text-xs md:text-sm h-9 md:h-10 px-3 md:px-4"
-            >
-              <Link href={`/packages/${pkg.slug}`}>View Details</Link>
-            </Button>
+            <span className="inline-flex items-center gap-1 bg-gradient-to-r from-forest-green to-mountain-blue text-white rounded-full border-0 text-xs md:text-sm h-9 md:h-10 px-3 md:px-4 shadow-md">
+              View Details
+            </span>
           </div>
         </div>
       </motion.div>
+    </Link>
     </motion.div>
   )
 }

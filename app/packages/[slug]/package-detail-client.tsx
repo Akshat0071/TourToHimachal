@@ -5,7 +5,6 @@ import { motion } from "framer-motion"
 import { Clock, MapPin, Users, Check, X, Phone, MessageCircle } from "lucide-react"
 import { Header } from "@/components/home/header"
 import { Footer } from "@/components/home/footer"
-import { BreadcrumbNav } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { PackageHeroSlider } from "@/components/packages/package-hero-slider"
@@ -67,22 +66,13 @@ export function PackageDetailClient({ pkg, allPackages }: PackageDetailClientPro
     <main className="min-h-screen bg-background">
       <Header />
 
-      <div className="pt-24 pb-4 bg-linear-to-b from-saffron/5 to-transparent">
-        <div className="container mx-auto px-4">
-          <BreadcrumbNav items={[{ label: "Packages", href: "/packages" }, { label: pkg.title }]} />
-        </div>
-      </div>
-
-      {/* Hero Slider */}
-
-
       {/* Main Content */}
-      <section className="py-4 sm:py-6 md:py-8 bg-linear-to-b from-transparent via-[oklch(0.99_0.015_85)] to-background">
+      <section className="pt-20 py-4 sm:py-6 md:py-8 bg-linear-to-b from-transparent via-[oklch(0.99_0.015_85)] to-background">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Content */}
             {/* Left Content */}
-            <div className="lg:col-span-2 space-y-8">
+            <div className="lg:col-span-2 space-y-8 lg:mt-20">
               {/* Package Summary */}
               <motion.div variants={fadeInUp} initial="hidden" animate="visible" className="bg-linear-to-br from-white to-saffron/5 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 border border-saffron/10 shadow-sm">
                 <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">

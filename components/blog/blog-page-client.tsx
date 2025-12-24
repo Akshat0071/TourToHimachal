@@ -89,7 +89,7 @@ export function BlogPageClient({ blogs, categories }: BlogPageClientProps) {
   return (
     <>
       <Header />
-      <main>
+      <main className="min-h-screen bg-background overflow-x-hidden">
         <div className="mt-16">
           <StaticHero
           image="/Images/blog.png"
@@ -102,11 +102,11 @@ export function BlogPageClient({ blogs, categories }: BlogPageClientProps) {
         {/* Featured section removed as requested */}
 
         {/* Main Content */}
-        <section className="relative z-10 py-6 md:py-16 bg-linear-to-b from-background via-[oklch(0.97_0.02_85)] to-background">
+        <section className="relative z-10 py-10 md:py-16 pb-20 md:pb-24 bg-linear-to-b from-background via-[oklch(0.97_0.02_85)] to-background overflow-hidden">
           <div className="container mx-auto px-4">
-            <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid lg:grid-cols-3 gap-6 md:gap-8 items-start min-w-0">
               {/* Main Column */}
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-2 min-w-0">
                 {/* Search */}
                 <div className="mb-4 md:mb-8">
                   <div className="relative">
@@ -121,8 +121,8 @@ export function BlogPageClient({ blogs, categories }: BlogPageClientProps) {
                   </div>
                 </div>
 
-                {/* Category Filter - Horizontal scroll on mobile */}
-                <div className="flex gap-2 mb-4 md:mb-8 overflow-x-auto pb-2 scrollbar-hide px-4 sticky top-14 z-20 bg-background/80 backdrop-blur-sm py-2 md:static md:bg-transparent md:p-0">
+                {/* Category Filter - Horizontal scroll on mobile (non-sticky for small screens) */}
+                <div className="flex gap-2 mb-4 md:mb-8 overflow-x-auto pb-2 scrollbar-hide py-2 md:py-0 md:overflow-visible md:pb-0">
                   <Badge
                     variant={selectedCategory === null ? "default" : "outline"}
                     className={`cursor-pointer shrink-0 rounded-full px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm transition-all ${selectedCategory === null
@@ -154,7 +154,7 @@ export function BlogPageClient({ blogs, categories }: BlogPageClientProps) {
                   variants={staggerContainer}
                   initial="hidden"
                   animate="visible"
-                  className="relative z-10 grid sm:grid-cols-2 gap-4 md:gap-6"
+                  className="relative z-10 grid sm:grid-cols-2 gap-4 md:gap-6 min-w-0"
                 >
                   {/* Status helper */}
                   {filteredPosts.length > 0 && (
